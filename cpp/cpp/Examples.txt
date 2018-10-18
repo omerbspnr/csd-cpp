@@ -682,7 +682,7 @@ int &func()
 
 int main()
 {
-	int &r1 = func();
+	int &r1 = func();ö
 	int &r2 = func();
 	int &r3 = func();
 

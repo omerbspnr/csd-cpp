@@ -120,7 +120,7 @@
 	
 	- C++'da global const nesneler static anahtar sözcüðü kullanýlmadan baðlantýsý internal'dýr.(Yani sadece dosya içine özgüdür.)
 	
-	- constexpr C++'ýn yeni anahtar sözcüðüdür. const expression'dan kýsaltmadýr.
+	- constexpr C++'ýn yeni anahtar sözcüðüdür. constant expression'dan kýsaltmadýr.
 
 	- 
 	
@@ -136,9 +136,9 @@
 	
 	- boolalpha bir manüpilatör'dür.Bir formatlama gibidir. bool türden bir deðerin true yada false olduðunu sözel olarak yazdýrýr(0, 1 gibi deðildir.)
 	
-	- C'de karakter literallerinin türü int, C++'da CHAR'dýr.
+	- C'de karakter literallerinin türü int(sizeof('a') == 4), C++'da CHAR'dýr(sizeof).
 	
-	- bool'dan int'e dönüþüm olmasý bool *'dan int *'a dönüþüm olacaðý anlamýna gelmez.
+	- bool'dan int'e dönüþüm olmasý bool *'dan int *'a dönüþüm olacaðý anlamýna gelmez.(int *'dan bool *'a dönüþüm yoktur)
 
 	- true deðeri her zaman 1'e dönüþür.
 	
@@ -152,7 +152,7 @@
 
 	- nullptr nin türü nullptr_t'dir.
 	
-	- C'de enum'ýn underlined_type'ý int'tir. C++'da böyle bir zorunluluk yoktur.
+	- C'de enum'ýn underlined_type'ý int'tir. C++'da böyle bir zorunluluk yoktur.  Belirtme þekli  enum Color : int {Red,Green,Blue}
 	
 	- C++ özel bir sentaks ile programcý enum türünün underlined_type'ýný belirleyebilir.(C++ 11 ile gelmiþtir.)
 	
@@ -212,30 +212,13 @@
 
 	- int &r = x;  Burada r  x'e bir referansdýr.
 	
-	- referans'larý initialize etmek zorunludur.(çünkü referanslar tab level const'tur. Yani int & const r);
+	- referans'larý initialize etmek zorunludur.(çünkü referanslar tab level const'tur(int & const r));
 
 	- r 'deki herhangi bir deðiþim x dede olur.
 
-	- &r  tab level const'tur(167).
-	
-	int x = 10;
+	- r1, r2 ve r3 de x'i reference eder.(174)
 
-	int &r = x;
-
-	int *ptr = &r;
-
-	*ptr = 99; // x = 99
-
-	++r; //++r == ++x;
-
-	int x = 10;
-	int &r1 = x;
-	int &r2 = r1;
-	int &r3 = r2;
-
-	-r1, r2 ve r3 de x'i reference eder.(174)
-
-	- bir reference oluþturacaksak ona mutlaka bir nesne ile ilk deðer vermeliyiz.
+	- bir reference'a mutlaka bir nesne ile ilk deðer vermeliyiz.
 
 	- int x = 10;
 	  int *ptr = &x;
@@ -272,7 +255,7 @@
 
 	  ++*r;// burada y'ye eriþiyoruz.(325)
 
-	  - reference'lar en fazla call by reference yapýlýrken kullanýlýr. 
+	  - reference'lar en çok call by reference yapýlýrken kullanýlýr. 
 
 	  - C'de call by reference yapmanýn tek yolu pointer parametre'dir.
 
@@ -282,7 +265,7 @@
 	  {
 		r = 768;
 	  }
-	  - Burada r fonksiyon çaðýrýsýnda kullanýlan parametrenin yerine geçer.()
+	  - Burada r fonksiyon çaðýrýsýnda kullanýlan parametrenin yerine geçer.
 
 	  func(x) --> Bu C'de kesilinkle call by value iken C++'da bunu bilemeyiz. (Çünkü burada fonksiyona bakmamýz gerekir.)
 
