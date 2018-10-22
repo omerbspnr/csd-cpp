@@ -206,13 +206,13 @@
 	Not : Kurs da hoca reference isimlerine r ile verilir. (Genel olarakta kullanýlýr.).
 
 	 
-	Not :  operatörler ifade de olur. decleratörler bildirimde olur.
+	Not :  operatörler ifade de olur. decleratörler bildirimde olur.(int *ptr -> burada yýldýz bir declaratördür.)
 
 	- smart pointer : kendisi bir sýnýf nesnesi olup bir pointer gibi kullanýlan, pointer olmamasýna raðmen client'lerin pointer gibi kullanýldýðý sýnýf nesneleridir.
 
 	- int &r = x;  Burada r  x'e bir referansdýr.
 	
-	- referans'larý initialize etmek zorunludur.(çünkü referanslar tab level const'tur(int & const r));
+	- referans'larý initialize etmek zorunludur.(çünkü referanslar top level const'tur(int & const r));
 
 	- r 'deki herhangi bir deðiþim x dede olur.
 
@@ -274,7 +274,7 @@
 	  - swap fonksiyonu referans semantiði ile yazýldý(371).
 	  
 	  Not : referans semantiði kullanýlýrken fonksiyonun çaðrýsýndan call by value yada call by reference olup olmadýðýný bilemeyiz.
-	  
+	  C++'da call by reference referans semantiði ile func(x) þeklinde olabilir.	  
 	  - fonksiyonlardan g call by value iken diðerleri call by reference'dýr(406)
 	  
 	  - C++'da const nesnesinin hayati önemi vardýr.
@@ -286,8 +286,8 @@
 
 	  - r'yi deðiþtirmeye yol açan herhangi bir iþlem sentaks hatasý olacaktýr.(461)
 		- const int x = 10;
-		- int &r = x; //gecersiz. const int &r olmalýdýr. const bir nesneden int &'a dönüþüm hatadýr.
-		()
+		  int &r = x; //gecersiz. const int &r olmalýdýr. const bir nesneden int &'a dönüþüm hatadýr.
+	
 		
 		- const int x= 10;
 		  int *ptr = &x; // gecersiz. const int *ptr olmalýdýr. const bir nesneden int *'a dönüþüm hatadýr.
@@ -332,7 +332,7 @@
 		2- dinamik bir ömürlü nesne ile
 		3- client'ten aldýðý nesnenin referansý ile dönüþ yapabilir.
 	
-	- static ömürlü nesneler için dikkat edilmesi gereken birden çok çaðrýldýðýnda bütün nesneler en son kullanýlan nesnenin deðerine sahip olacaktýr.
+	- static ömürlü nesneler için dikkat edilmesi gereken birden çok çaðrýldýðýnda bütün nesneler en son kullanýlan nesnenin deðerine sahip olacaktýr.(667)
 
 
 	- referans semantiði ile hayatamýza giren fonksiyonlar.
@@ -346,7 +346,7 @@
 	---Referanslar ile pointerlarýn karþýlaþtýrýlmasý
 		1- pointer deðiþkene ilk deðer vermeden oluþturabilirken, refaransta ilk deðer verme zorunludur..
 		
-		2- bir pointer'ýn kendisi const olmak zorunda deðildir.(Kodun farklý farklý yerlerinde farklý nesneleri gösterebiliriz.). Referanslar her zaman tab level const'tur.
+		2- bir pointer'ýn kendisi const olmak zorunda deðildir.(Kodun farklý farklý yerlerinde farklý nesneleri gösterebiliriz.). Referanslar her zaman top level const'tur.
 		
 		int *const ptr = &x;
 		ile int &r = x; ayný anlamdadýr. içeriði deðiþtirebiliriz ama r'yi deðiþtiremeyiz.
@@ -397,13 +397,14 @@
 			2- int &r = x; yerine int &r(x); kullanýlabilir.
 			
 		C++11 ile gelenler
-			1- int x{ 10 };
+			1- int x{ 10 }; // uniform initializer. diye geçer
 			2- int a[]{ 1, 5, 65, 7 };
 			3- int &r{ x };
 			int *ptr{ &x };
 		
 		double dval = 5.6;
-		int x{dval}; //uniform initializer ile narrowing conversion legal deðildir.
+		int x{dval}; //tekbiçimli ilk deðer verme (uniform initializer) kullanýlmasý durumunda 
+					//daraltýcý dönüþüm (narrowing conversion) sentaks hatasý. D
 		int y(dval)  // gecerli.
 		int x = dval; // gecerli.
 	
@@ -433,7 +434,7 @@
 		
 		- varsayýlan argüman'ýn deðeri bir fonksiyonun geri dönüþ deðeri de olabilir.
 		
-		- varsayýlan argümanýn açýklanmasý(1301).
+		- varsayýlan argümanýn örneði(1301).
 		
 		- önceden baþka bir kütüphaneden eklenen bir fonksiyonun bir argümanýný varsayýlan argüman yapabiliriz.(1330);
 
@@ -441,10 +442,11 @@
 			- not : varsayýlan argüman'ý yeniden declare edilmez.
 			- void func(int, int, int = 15);
 			  void func(int, int = 20, int); //func fonksiyonu redeclara edilmiþtir. fonksiyonun yeni parametrik hali(int, int = 20, int = 15);'dir.
+			  void func(int, int = 20, int = 15) // error, varsayýlan argüman redaclara edilmez.
 
-		- sarmalýyýcý bir fonksiyon ile 3. parametre ye gönderdiðimiz parametre ile varsayýlan argümaný ikinci parametreye atamak.
+		- sarmalýyýcý bir fonksiyon ile 3. parametre ye gönderdiðimiz parametre ile varsayýlan argümaný ikinci parametreye atamak iþimizi kolaylaþtýrabilir.(1397)
 
-	Not : bildirimde varsayýlan argüman var ise tanýmda olmayacak. sentaks hatasý olur.
+	Not : Varsayýlan argüman ya bildirimde yada tanýmda olmak zorundadýr.
 		- itoa'yý wrapper ile kendimize göre yazdýk(1417).
 
 		- bazen varsayýlan argüman kullanýlmasýnýn nedeni sadece test amaçlý varsayýlan argüman kullanýlýp kullanýlmadýðýna bakmak içindir.(1451).
@@ -459,6 +461,11 @@
 	- Özellikle yüksek seviyeli dillerde birinci amaç programcýnýn iþini kolaylaþtýrmaktýr.
 	- Bu mekanizma C'de olmamasý çok büyük bir derleyiciye sahip olmamasýndan dolayýdýr.
 	- Burada derleyiciyi yoran þey fonksiyonlarý elemeden geçirmektir. Ve bu derleyici çok fazla yoracaktýr.
+	- top level const'luk function overload olmaz. 
+	
+	- top level const = nesne'nin kendisini gösteren const'luktur. Örneðin(const int x, int * const ptr)
+
+	- referans semantiði kesinlikle function overloading
 	
 	-- function overload resolution : derleyicinin compile time da n tane ayný isimden fonksiyon varken bunlardan hangisini seçeceðidir.
 		- overloaded function' a da biz overload deriz.(Yani burada overload isim olarak kullanýlýr.)
@@ -484,19 +491,21 @@
 			1- isimler ayný scope da olmalýdýr.(farklý scope da bildirilen fonksiyonlar overload etmez.Global scope tan farklý scopelarda vardýr.)
 			
 			2- imzalarý(signature) farklý olacak.
-				(fonksiyonun parametrik yapýsý dahildir. Geri dönüþ deðeri dahil deðildir. Yani kaç parametresi olduðu ve parametrelerinin türü)
-				- imzalarý ve ayný zaman da geri dönüþ deðerleri de farklý ise bu overloading'dir.
+				(fonksiyonun parametre sayýsý ve parametrelerinin türü dahildir. Geri dönüþ deðeri dahil deðildir. Yani geri dönüþ deðerinin ayný yada farklý olmasý önemli deðildir. )
+				- imzalarý  ve  scopelarý ayný, geri dönüþ deðerleri de farklý ise bu overloading'dir.
+
+	
 
 	- eðer imzalarý ayný ve geri dönüþleri ayný ise bu function redeclarationdýr.
 		- void func(int);
 		  void func(int); //function redeclarationdýr.
 		
 	- void func(const int);
-	  void func(int); //function redeclarationdýr. tab level constluk her zaman legaldir. low level constluk da durum farklýdýr.
+	  void func(int); //function redeclarationdýr. top level const'luk her zaman  redeclaration kabul edilir. ama legaldir.
 
-	 Not : ayný fonksiyon ise derleyici ikisinin ayrý ayrý tanýmlanmasýna izin vermez.
+	 Not : ayný fonksiyon ise derleyici ikisinin ayrý ayrý tanýmlanmasýna(define edilmesine) izin vermez.
 	
-	- void func(const int x); // bu çok saçma bir definition'dýr. Zaten otomatik ömürlü olduðundan dolayý deðiþip deðiþmemesi saçmadýr.
+	- void func(const int x); // bu  saçma bir declaration'dýr. Zaten otomatik ömürlü olduðundan dolayý deðiþip deðiþmemesi saçmadýr.
 	
 	- void func(int * const ptr);
 	  void func(int *ptr); //redeclaration(1617)
@@ -509,7 +518,7 @@
 
 	- refereans semantiði kesinlikle function overloadingdir.(geri dönüþ deðeri farketmez)(1687)
 	
-	- const overloading (eðer const'luk low level const ise function overloading olabilir.)
+	- const overloading (eðer const'luk low level const ise function overloading olma ihtimali yüksek. top level const'ta redeclaration'dýr.)
 		- Bu bir çok yerde karþýmýza çýkacak bir yapýdýr.
 	
 	- void func(int &r);
@@ -526,7 +535,7 @@
 
 	- Eðer kurallarýný iyi bilmezsek beklentimiz ile bir þey yapmaya kalkarsak yanlýþ sonuçlar alabiliriz.
 	
-	- ortada function overloading varken ayný isimli fonksiyonlarýn çaðrýlmasýnda sentaks harasý olabilir..
+	- ortada function overloading varken ayný isimli fonksiyonlarýn çaðrýlmasýnda sentaks hatasý olabilir..
 	
 	- C++'da en zorlayan þeylerden biri ortada sentaks hatasý verken programcýnýn hatayý bulamamasýdýr.
 		1- nedeni çok fazla kural olmasýdýr.
@@ -536,7 +545,8 @@
 
 	- illegal olmasý durumunda iki farklý durum vardýr.
 		1- ortada n tane fonksiyon varken sizin fonksiyon çaðrýnýz hiç bir fonksiyona uygun deðildir.(no match)
-		2- derleyici dilin kurallarýna göre birini seçmesini gerekirken bir seçicilik yoktur.(ambiguity : çift anlamlýlýk hatasý)
+		2- derleyici dilin kurallarýna göre birini seçmesini gerekirken bir seçicilik yoktur. 
+		Yani gönderdiðimiz parametreler birden çok fonksiyona uygun olabilir(ambiguity : çift anlamlýlýk hatasý)
 	
 	- void func(int)
 	  void func(int, int);
@@ -558,24 +568,31 @@
 	- eðer bir argüman bir parametre deðiþkenine aktarýlýyorsa, derleyici function overload resolution'ý üç aþamada gerçekleþtirir.
 		1- derleyici ayný scope içirisindeki bütün isimleri ayný olan overload'larý listeye dahil eder.Bu süreçte imzalarýný da alýr.
 		2- derleyici fonksiyon çaðrýsýndaki argüman sayýsý ile fonksiyonlarýn parametre sayýsýna denk düþmesi gerekecek ve buna göre fonksiyonlarý seçecektir.
-		   (var sayýlan argüman  dahil  ve variadiclic'de dahil)Her bir argümandan her bir parametreye tür dönüþümü de uygun olmasý gerekir.(uygun fonksiyon)
+		   (var sayýlan argüman  dahil  ve variadic olup olmamasý da dahildir)Her bir argümandan her bir parametreye tür dönüþümü de uygun olmasý gerekir.(uygun fonksiyon)
 		   Not : eðer 2. aþamayý geçen fonksiyon yoksa error. Bir tane fonksiyon varsa legal. eðer birden fazla varsa 3. aþamaya geçecek fonksiyon varsa derleyici
-		   en uygun fonksiyon vardýr.
+		   en uygun fonksiyon vardýr. Burada seçim 
+		   
 		3- derleyici bu aþamada argümandan parametreye geçiþte 3 farklý yöntem arayacak.
-			a) conversion
-				- int'ten double'a, double'dan int'e.
+		    - conversion, 
+		    - user defined conversion, 
+		    - variadic function'a göre yapýlabilir. Burada conversion user defined conversion'dan, oda variadic function'dan daha iyidir.
+			- Sýk yapýlan hatalarda özellikle iki durumunda standart conversion'a göre yapýlmasý yada iki durumunda user defined conversion'a göre yapýlmasýdýr.	
+			a) conversion(dönüþüm)
+				- Argüman'dan parametre deðiþkenine aktarým dilin kurallarýna göre legaldir.
 				- dönüþümü kaliteye göre yapýlabilir.
 					1- exact match(tam uyum)olabailecek en iyi dönüþüm kategorisidir.
 						-argüman olan ifadenin türü ile parametrenin türü bire bir ayný olmasýdýr.
 						- standartlar aþaðýdaki durumlarýn hepsini exact match kabul eder.
-							1- L value to R value transformation.(Bir fonksiyon'un parametresi bir r value expression'ken  ona L value expression göndermektir.)
+							1- L value to R value transformation.
+								- Bir fonksiyon'un parametresi bir r value expression'ken  ona L value expression göndermektir.
+								  void func(int x); --> fonksiyonu bir nesne ile çaðýrmak, yada sabit bir sayý ile çaðýrmak.
 							2- const conversion 
 								- bir fonksiyonun parametresi const int * ise biz onu int * argümaný ile çaðýrabiliriz.(aksi durum errordur)
 							3- array to pointer conversion
 								- fonksiyonun parametresi int* iken fonksiyonu dizinin adresi ile çaðýrmaktýr.(1867)
 							4- function to pointer conversion(1866 - 1871);
-					2- promotion(terfi)
-						1- integral promotion(int altý tðrlerin int'e yükseltilmesi.)
+					2- promotion(terfi, yükseltme)
+						1- integral promotion(int altý türlerin int'e yükseltilmesi. char,short,unsigned char, bool	 --> int)
 							C' deki integral promotion'larýn hepsi vardýr. Ayrýca boolean türünden int'e de vardýr.
 						2- float to double promotion
 							- sadece floattan double'a olan promotion'dýr.
@@ -602,9 +619,9 @@
 					1- void func(double);
 					   void func(int *);
 
-					   func(0); çaðrýsý nullptr'e dönüþüm olduðu için error'dur.
+					   func(0); çaðrýsý nullptr'e dönüþüm olduðu için error'dur.ambiguity'dir.
 					
-				    2- ) Not : nullptr'in kullanýmý burada özellikle gerekir.(nullptr sadece pointer'lara atanabilen bir sabittir.) nullptr'den sadece pointer türlerine dönüþüm vardýr.
+				    2- ) Not : nullptr'in kullanýmý burada özellikle gerekir.(nullptr sadece pointer'lara atanabilen bir sabittir.) nullptr'den sadece pointer türlerine dönüþüm vardýr.	
 					
 					3- void func(int x);
 					   void func(int &x);
@@ -618,18 +635,18 @@
 					5- varsayýlan argüman ile uyum herhangi bir þekilde dezavantaj deðildir. Soruda derleyici ambiguity hatasý verir.(c.a.h)(2010)
 						- C++11 ile geren bir araç ile fonksiyon delete etmek aracý vardýr. Daha sonra görecez.
 					6- Bir overload fonksiyon birden fazla parametreye sahip ise seçileblirlik kriteri
-						1- bir parametre de üstünlük olacak. Ama diðer parametrelerinde de hiç birinden kötü olmayacak. Seçim gene yukarýdaki kurallara göre yapýlacak.
+						1- en az bir parametre de üstünlük olacak. Ama diðer parametrelerinde de hiç birinde kötü olmayacak(eþit olabilir). Seçim gene yukarýdaki kurallara göre yapýlacak.
 
 			b) user defined conversion (programcýnýn bir fonksiyon ile dönüþümü yapmasý)
 				- C'de bir karþýlýðý yoktur.
-				- normalde bir türden bir türe fonksiyon yoktur. programcý tarafýndan yazýlan bir fonksiyon ile dönüþüm gerçekleþtirir.(1838)
+				- normalde bir türden bir türe dönüþüm	 yoktur. programcý tarafýndan yazýlan bir fonksiyon ile dönüþüm gerçekleþtirir.(1838)
 				- dönüþümü legal hale getiren bu fonksiyonun varlýðýdýr.
 
 			c) variadic functions 
 				- seçicilik açýsýndan en kötü durum budur.
 			
 		
-		- C++'dan C fonksiyonu çaðýrmak bir önlem almaz isek bu bir hata olur(linker hatasý).
+		- C++'dan C'de derlenmiþ bir  fonksiyonu çaðýrmak için bir önlem almaz isek bu bir hata olur(linker hatasý).
 			- C'de derlenmiþ fonksiyon C++ derleyicisinin derlediði kodun obj isimlendirmesinden kaynaklanmaktadýr.
 			- extern "C" void func_dec(par1); ile linker'ýn bunu bulmasýný saðlarýz. C++ derleyicisine bunu mutlaka göstermeliyiz.
 			- extern "C" {
@@ -656,22 +673,23 @@
 	- Ve tür dönüþtürme operatörleri sözelleþtirilmiþtir.
 
 	Not : veri kaybýnýn gönüllü yapýldýðý iþlemlerde kullanýlabilir.
-		-ival = (int)dval;
-		-
+		- ival = (int)dval; Bu tür dönüþümlere yani int'ten double'a double'dan int'e dönüþümlere static cast denir.
+		- C++'da bu kategorideki dönüþümleri yapmak için C++'ýn static_cast tür dönüþüm keywordu kullanýlýr.
+		  static_cast<target type>(expression) þeklindedir.
 
-	not : const cast iþlemleri : const char * türünden bir türü char *'e cast etmek.
+	not : const cast iþlemleri : const char * türünden bir türü char *'e cast etmek.strchr'deki durum(2123)
 
 	alt seviyeli c kodlarýnda tür dönüþümü çok riskli olabilir.
 
 	Student türünden bir nesne char *p = (char *)&s;
 
-	- static_cast 
+	- static_cast --> enum int dönüþümleri de bununla yapýlýr.
 
-	- const_cast
-	
-	- reinterpret_cast
+		
+	- her tür dönüþüm operatörünün kendi yapabileceði bir iþ vardýr.,
+	- reinterpret_cast --> yeniden yorumlamak. Farklý türden bir nesneyi deðiþtirir. Örnepin int *'dan char *'a dönüþüm saðlanýr.
 	-----------------------------
-	- dynamic_cast(C karþýlýðý yoktur.)
+	- dynamic_cast(C karþýlýðý yoktur.) Nesne yönelimli progragmlama ile ilgilidir. run time polymorfizmi ile alakalýdýr. Yani kalýtým ile
 
 
 	Yukarýdakiler tür dönüþtürme operatörleridir. Ve hepsinin ortak bir sentaksý vardýr.
@@ -695,7 +713,7 @@
 
 		int main(){
 			reinterpret_cast<char * >(func());//bir hatadýr.
-			const_cast<char *>(reinterpret_cast<char * >(func()));
+			const_cast<char *>(reinterpret_cast<const char * >(func()));
 			reinterpret_cast<char *>(const_cast<int * >(func()));    (2163);
 		}
 
@@ -707,7 +725,7 @@
 
 	--------------------------------11.11.2017 CUMARTESÝ------------------------------------
 
-	Not : dizi boyutunu ifade eden deðer constant expression olmalýdýr. Ve C++'da bunu derleme zamanýnda belirleyebilir.(2201) 
+	Not : dizi boyutunu ifade eden deðer constant expression olmalýdýr. Ve C++'da bunu derleme zamanýnda belirlenebilir.(2201) 
 	- Eðer bir fonksiyonu constexpr keyword ile belirtirsek bunu compile time da derleyici deðerin kaç olduðunu bilir.(2201)
 	- compile time da hesaplanabilecek bir deðer asla run time da (C++11'den sonra ) hesaplanmamýþtýr.
 	- eðer const bir nesneye constant expression bir nesne ile deðer verilirse const nesne constant expression sayýlýr.
@@ -1041,12 +1059,12 @@
 	ise return this ile geri dönüþ yapabiliriz.
 	- eðer nesnenin kendisini istiyor ise fonksiyonun geri dönüþ deðeri referens semantiði ile olup return *this olur.
 	
-	Not : this her zaman tab level const bir pointer'dýr.(T *const this);
+	Not : this her zaman top level const bir pointer'dýr.(T *const this);
 	-this = nullptr bir //hata verecektir. 
 
 	eðer sýnýf member_function'ý const member function ise void Myclass::func()const;
 	
-	- Yani this'in low level const olup olmayacaðý bize baðlý. tab level const olmasý ize zorunludur.
+	- Yani this'in low level const olup olmayacaðý bize baðlý. top level const olmasý ize zorunludur.
 
 	- Bir fonksiyonun const üye fonksiyon olmasý bu fonksiyonun sýnýf nesnesini deðiþtiremeyiz.
 	

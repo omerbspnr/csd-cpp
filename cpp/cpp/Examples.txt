@@ -682,7 +682,7 @@ int &func()
 
 int main()
 {
-	int &r1 = func();ö
+	int &r1 = func();
 	int &r2 = func();
 	int &r3 = func();
 
@@ -1860,7 +1860,7 @@ int main()
 
 exact match
 
-1) L value to R value transformation
+1) L value to R value transformation	
 2) const conversion
 3) array to pointer conversion
 4) function to pointer conversion
