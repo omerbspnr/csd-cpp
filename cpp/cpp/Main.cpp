@@ -1,14 +1,25 @@
 #include <iostream>
 using namespace std;
 
+class Myclass {
+	static int x;
+public:
+	void func() {
+		cout << "func" << endl;
+	}
+	void func() const {
+		cout << "const func" << endl;
+	}
+};
 
 
-int main() {
-	char arr[] = "merhaba dünya";
+int main()
+{
+	Myclass myclass;
+	const Myclass myclass1;
 
-	cout << typeid(reinterpret_cast<const char *>(arr)).name() << endl;
-	
-	
+	myclass.func();
 
+	myclass1.func();
 
 }

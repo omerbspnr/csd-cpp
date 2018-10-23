@@ -725,10 +725,14 @@
 
 	--------------------------------11.11.2017 CUMARTESÝ------------------------------------
 
-	Not : dizi boyutunu ifade eden deðer constant expression olmalýdýr. Ve C++'da bunu derleme zamanýnda belirlenebilir.(2201) 
+	Not : dizi boyutunu ifade eden deðer constant expression olmalýdýr. C++'da bu derleme zamanýnda belirlenmelidir.(2201) 
 	- Eðer bir fonksiyonu constexpr keyword ile belirtirsek bunu compile time da derleyici deðerin kaç olduðunu bilir.(2201)
+	- Ama burada fonksiyona göndereceðimiz deðerde bir constexpr olmak zorundadýr.
+	- constexpr --> const int x = 10; constexptr int x= 10;
 	- compile time da hesaplanabilecek bir deðer asla run time da (C++11'den sonra ) hesaplanmamýþtýr.
-	- eðer const bir nesneye constant expression bir nesne ile deðer verilirse const nesne constant expression sayýlýr.
+	- eðer const bir nesneye constant expression bir nesne ile deðer verilirse const nesne constant expression sayýlýr.(const int x = 10)
+	- Derleyici bir ifade gördüðü zaman eðer bu compile time da hesaplanabilieen bir ifade ise bunu comple timeda constexpr olarak hesaplar. Deðilse zaten runtime da 
+	  fonksiyona girince hesaplanacaktýr.
 	-- constexpr keyword:
 		1- const ile constexpr farklý bir keyword'dur.const int x = 10; // x burada constant expression'dýr.
 													  const int x = func() // x burada constant expression deðildir.(2201)
@@ -740,15 +744,15 @@
 		3- constexpr int x = exp;
 			- Burada iki farklý amaç vardýr.
 				1- okuyucuya bu ifadenin constant expression olduðunu belirtiriz.
-				2- ve biz de bunun exp'ýnýn constexpr olup olmadýðýný biliriz.
-		- bir pointer'ýn const expression olmasý için verilen nesne statik ömürlü olmalýdýr.()
+				2- ve biz de exp'ýnýn constexpr olup olmadýðýný biliriz.
+		- bir pointer'ýn const expression olmasý için ona verilen adresin statik ömürlü nesne adresi  olmalýdýr.()
 		int x = 10;
 		int main(){
 			constexpr const int *ptr = &x;//constexpr yüzünden ptr'yi deðiþtiremeyiz. ve constexpr gereken bir ifade de kullanýlabilir.
 			// const ise sadece *ptr'yi okuma amaçlý kullanacaktýr.
 		}
 
-		- bir ifadenin constexpr olup olmadýðýný anlayýp anlamamak için
+		- bir ifadenin constexpr olup olmadýðýný anlayýp anlamak için ya ayný türden constexpr bir nesneye atarýz. yada bir dizinin boyutu haline getirilmelidir.
 			-const int x = 10;
 			 int z = 10;
 			 constexpr int y = x; //legaldir.
@@ -758,35 +762,38 @@
 		int main(){
 		int x = 10;
 		const int *const ptr = &x 
-		// constant expression gereken yerlerde ptr yi kullanamayýz.
+		// constant expression gereken yerlerde ptr yi kullanamayýz. ptr'nin constant expression olma ihtimali yoktur.
+
+		- constexpr,
 		}
 
 		--------------------SINIFLAR-----------------
 
 		not : procedurel programlamada temel yazýlým birimi fonksiyonlardýr.
 		- nesne yönelimli programlama da paradigma da ise bu tamamen sýnýflara ayrýþtýrýlarak yapýlmalýdýr.(ayrýþtýrmalar class'lara yöneliktir.)
-		Not : C++ hem nesne yönelimli programlamaya destek vermektedir. istediðin paradigma da program yazabiliriz.
+		Not : C++ hem nesne yönelimli programlamaya destek vermektedir. istediðin paradigma da program yazabiliriz. Ýstersen kombine de edebiliriz.
 		- Sýnýflar nesne yönelimli program da temel yapýtaþýdýr.
-		- C'de en yakýn karþýlýðý yapýlardýr.
+		- C'de en yakýn karþýlýðý struct'lardýr.
 		- Ama C++ daki yapýlar da birer sýnýftýr. C++'daki struct anahtar sözcüðü ile C'deki nin anlamý tamamen birbirinden farklýdýr.
 		- class C++'da bir türdür.
 		- class MyClass {
 		
-		}; Bir definition'dýr.
+		}; //Bir definition'dýr.
 
-		- class definition client'lar bu türü kullanacaksa kesinlikle baþlýk dosyasýnda olmalýdýr(Hemen her zaman baþlýk dosyasýnda olur). diðer türlü .cpp dosyasýnda bulunur.
+		- class definition'larý client'lar bu türü kullanacaksa kesinlikle baþlýk dosyasýnda olmalýdýr(Hemen her zaman baþlýk dosyasýnda olur). diðer türlü .cpp dosyasýnda bulunur.
+		- implimantasyon kullanacak ise .cpp dosyasýnda olabilir. Çoðunlukla sýnýf ile baþlýk dosyasýnýn adý ayný anlamdadýr.
 		- baþlýk dosyasýnýn ismi de tür ismi ile ayný olabilir.
 
-		- class Data {
+		- struct Data {
 		
 		};
-		- typedef bildirimi olmadan da bu türün ismi Data'dýr.(Struct data gibi deðildir.)
+		-  C'deki gibi typedef bildirimi olmadan da bu türün ismi Data'dýr.(Struct data gibi deðildir.)
 
 		class Data {
 		
 		};
 
-		- C'de öðesi olmayan bir yapý sentaks hatasýdýr. C++'da ise bu geçerlidir.(ileride öðreneceðiz).
+		- C'de elemaný olmayan bir yapý sentaks hatasýdýr. C++'da ise bu geçerlidir.(ileride öðreneceðiz).
 
 		- C++'da struct'ta olsa class' da olsa ikiside class'dýr.iki farklýlýðý vardýr.(Daha sonra göreceðiz.)
 
@@ -795,7 +802,11 @@
 			void func();
 			typedef int WORD;
 		};
-		- bu sýnýfýn içinde tanýtým yapmak mümkündür.Bunun elemanlarýna member denir.
+		- bu sýnýfýn içinde bildirim yaparak isim tanýmý yapmak mümkündür.Bu isimelere class member denir.
+		- 3 çeþit member vardýr.
+			1- Data member
+			2- member function
+			3- type member(typedef int Word sýnýfýn içinde yapýlmýþ olmalýdýr.)	
 		- mx bu sýnýfýn bir data member'dýr.(deðer tutan eleman anlamýndadýr).
 		- C++'da bir sýnýfýn içinde bildirilen fonksiyonlar vardýr.func bunlara member function denir.
 		- sýnýfýn içinde bildirilen fonksiyonlar farklýdýr. Diðerleri C'deki gibi  globaldir.
@@ -810,11 +821,13 @@
 		- C'de structure scope diye bir scope yoktur. C++'da class scope vardýr.
 
 		- class scope'un olmasý namelook up'ý etkiler.
+		- Derleyicinin bir isme ararken sýnýfýn içine bakmasý için bazý koþullarýn gerçekleþmesi gerekir. Bu koþullar oluþmaz ise
+		  Derleyici gidip class'ýn içine bakmaz
 
 		- global fonksiyonlarda kullanýlan bir ismin class'larda aranmasý için
-			1- isim nokta operatörünün sað operandý olarak kullanýlmýþsa
-			2- isim ok operatörünün sað operandý olarak kullanýlmýþsa
-			3- isim binary ::(scope resolution operator) operatörünün sað operandý olarak kullanýlmýþsa(2315)
+			1- isim, nokta operatörünün sað operandý olarak kullanýlmýþsa
+			2- isim, ok operatörünün sað operandý olarak kullanýlmýþsa
+			3- isim, binary ::(scope resolution operator) operatörünün sað operandý olarak kullanýlmýþsa(2315)
 		
 		- ismin aranýp bulamamasý zaten errordur.
 		- isim aramanýn baþarýlý olmasý ismin kullanýldýðý yerde bir sentaks hatasý olup olmayacaðý farklýdýr.
@@ -826,16 +839,18 @@
 		Not : C'deki yapýlardan önemli bir farký da þudur. PUBLIC, PROTECTED, PRIVATE  kesinlike scope deðildir.
 			- class scope'taki isimler bulunduktan sonra birde bu kodun bu ismi kullanma yetkisi olup olmadýðý kontrolünden geçecektir.
 				- Buna access kontrol(eriþim kontrolü) denir.
-			- sýnýfýn PUBLIC bölümünde eriþim konusunda derleyici herhangi bir hata vermez.
-			- sýnýfýn PRIVATE bölümünde client buraya eriþemez.(can not access in PRIVATE)
+			- sýnýfýn PUBLIC bölümünde dýþarýya açýk yani eriþim konusunda hiç bir kýsýtlama yoktur..
+			- sýnýfýn PRIVATE bölümünde client buraya eriþemez.(can not access in PRIVATE). Sadece sýnýfýn kendi fonksiyonlarý eriþebilir.
 			- C'deki bütün yapýlarda eriþim PUBLIC'dir.
 			- Ve bunlar C'de yoktur.
 			- PROTECTED C'de olmayan bir araç olan kalýtýmdýr(inheritance). client buraya da eriþemez.
-			- PROTECTED kalýtým uygulandýðýnda ancak aktif olabilir.
+			- PROTECTED kalýtým uygulandýðýnda ancak aktif olabilir. Yani  kalýtým olmaz ise private bölðmden herhangi bir farký yoktur.
 			- Yani PROTECTED bölümü client'lara kapatýlmýþ, ama kalýtým yoluyla elde edilecek sýnýflara açýlmýþtýr.
-			- C++'da bu keyword'u bölgesel olarak kullanabiliriz. Herhangi bir memberýna verilmez.
+			
 
+			- C++'da bu keyword'leri bölgesel olarak kullanabiliriz. Herhangi bir memberýna verilmez.(örneðin public int x;)
 			- class'larýn genel eriþimi default olarak PRIVATE'týr. struct'larda bu PUBLIC'tir.
+
 
 			class Data{
 			public:
@@ -877,21 +892,30 @@
 		- ilerleyen saatlerde data member'larý kendi içinde iki'ye ayýracaðýz.
 			1- non-static data member
 			2- static data member
+
 	class Data{
 	int mx;//non-static data member
 	static int my; //static data member
 	};
 
-	- non-static data member C'deki yapý nesneleri gibidir.(fiilen sýnýf nesnesi içerisindedir.)
-	not: class'lar tipik olarak bir baþlýk dosyasýndan gelecektir.
-	- non-static türünden bir nesne eklemek sizeof'u direk artýracaktýr. C'deki yapýlar gibi olacaktýr.
-	- statik türünden olanlar ise C'deik global nesne'ler gibidir. tek farký scope'larý file scope'tur.
-	- static data member'lar (fiilen sýnýf nesnesi içerisinde deðildir).(2440)
+	- non-static data member C'deki struct'ýn nesneleri gibidir.(fiilen sýnýf nesnesi içerisindedir.)
+	- non-static türünden bir nesne eklemek sizeof'u doðrudan artýrýr. C'deki structlar  gibi olacaktýr.
+	- statik veri elemanlar ise C'deik global nesne'ler gibidir. tek farký scope'larý global nesnelerin file scope iken
+	  static veri elemanlarýnýn ise class scope'tur.
+	- Sýnýfýn static veri elemanlarý fiilen sýnýf nesnesi içinde deðillerdir. (2440)
+	- Sýnýfýn static veri elemanlarý kaç tane nesne olursa olsun bir tanedir. Bu sýnýflar için ortaktýr.
+	- Sýnýfýn statik veri elemanlarý baþlýk dosyasýnda(Sýnýfýn içinde) deðil kaynak dosyada(Sýnýfýn dýþýnda) initialize edilir. 
+	- Eðer sýnýfýn içinde initialize edilecekse nesne const olmalýdýr.
 
-	- class bir ismin sözlükteki tanýmý gibidir.
+	  
+
+	- class bir ismin sözlükteki tanýmý gibidir. class bizim domain'imizdeki sorunlarý çözmek için kullanýlan varlýklarý iliþkin türlerdir.
+	- Yani class bizim için soyut bir nesnedir. Nasýl bir þey olduðunu ve neleri olduðunu anlatýr. Ne zamanki bundan bir nesne oluþturursak bu bizim için object,instance yada nesne denir.
+	- Nesnelerin data member'larý genel olarak o nesneye iliþkin bilgileri tutar.
 	- nesnelerin member'larý specific özellikleri tutar.
 	- sýnýflarýn non-static veri elemanlarý sýnýf nesnesinden sýnýf nesnesine göre deðiþebilen elemanlardýr.
 	- sýnýfýn static veri elemanlarý ortada object olsun yada olmasýn vardýr.
+	- object olmadan bir anlamý olmuyorsa bunlar non static veri elemanýdýr.
 	- elemanlarýn sýnýfýn private bölümünde oluþturulmasý 
 		1- öðrenme yükünü giderir.
 		2- eðer bunlar kullanýlsaydý bunlarda yapýlan deðiþiklikler beni de etkileyecektir. Bu yüzden private korumasý
@@ -906,13 +930,15 @@
 	- non-static bütün fonksiyonlar kaç parametresi var ise arka tarafta bir fazlasýna sahiptir. O nesne türünden adres tutan bir pointer'dýr.
 
 	- sýnýflar'ýn member function'larý overload edilebilir.(2486)
+	- Sýnýfýn public, private yada protected bölümü ayrý scope'lar deðildir.
 	- bizim fonksiyonlarýmýz çoðunluðu member_function'dýr.
-	- functionoverloading vardýr. Çünkü public scope belirtmez.(2507)
+	- functionoverloading vardýr.(2507)
 
 	- member_function'larda  static yada non-static olabilir.
 	- non-static member_func'larýn arka planda bir fazla parametresi vardýr(pointer türünden bir nesne).
-	- static member_func'larýn ise görünen parametresi kadar parametresi vardýr.
-
+	- örneðin derleyici 
+	- mydate.set() gibi bir fonksiyonuna aslýnda parametre görsel olarak gönderilmezken arka planda mydate'in adresi gönderirilir.	  
+	- static member_func'larýn fazladan bir parametresi yoktur.
 	- çözünürlük operatörünün önceliði 1. öncelik seviyesindedir.
 	- static member function'larýn object(instance) ile hiç bir alakasý yoktur.
 
