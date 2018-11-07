@@ -28,7 +28,6 @@ bool isprime(int val) {
 	return true;
 
 }
-
 void randomize() {
 	srand(static_cast<unsigned>(time(nullptr)));
 }

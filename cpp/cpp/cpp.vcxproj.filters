@@ -21,6 +21,9 @@
     <Text Include="ExamplesRetry.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Konubasliklari.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -29,9 +32,15 @@
     <ClCompile Include="nutility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Name.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nutility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Name.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

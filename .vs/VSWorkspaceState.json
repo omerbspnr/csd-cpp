@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\cpp",
+    "\\cpp\\cpp",
     "\\cpp\\cpp\\Debug"
   ],
-  "SelectedNode": "\\cpp\\cpp",
+  "SelectedNode": "\\cpp\\cpp\\Main.cpp",
   "PreviewInSolutionExplorer": false
 }

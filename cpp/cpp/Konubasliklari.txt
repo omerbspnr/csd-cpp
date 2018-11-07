@@ -1,0 +1,9 @@
+Referans semantiði
+Varsayýlan argüman
+function overloading
+function overloading resolution
+Dönüþtürme operatörleri
+constexpr keyword'u
+Sýnýflar
+	uniry çözünürlük operatörü(::)
+	

@@ -140,13 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Name.cpp" />
     <ClCompile Include="nutility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Examples.txt" />
     <Text Include="ExamplesRetry.txt" />
+    <Text Include="Konubasliklari.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Name.h" />
     <ClInclude Include="nutility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

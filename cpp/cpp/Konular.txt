@@ -18,7 +18,7 @@
 	
 	- Özellikle dinamik ömürlü nesnelerin kontrolünde kullanýlan pointerlarýn yerinde burada smart pointer denilen
 	  özel sýnýf nesneleri kullanýlacaktýr. Yinede bir çok konunun anlaþýlmasý için pointer konusunun çok iyi bilinmesi
-	  gerekir. C'deki temel pointer kavramlarýn hepsini tamamen iyi deðildir.
+	  gerekir.
 	
 	- C++ generic programlama konusunda(türden baðýmsýz programlama) dünyanýn en geliþmiþ dilidir. Yani template'lerdir.
 	
@@ -30,7 +30,7 @@
 	
 	- using namespace std;  //bu bildirim std namespace'i içinde ki isimlerin derleyici tarafýndan aranmasý sürecinde nitelenmeden
 	  yine de o namespace de aranmasýný saðlýyor. eðer biz bu bildirimleri yapmasak cout ve endl için  derleyici arayýp bulamayacaktý.
-	  çünkü namelook up sürecinde o namespace'e bakmayacaktý. Derleyicinin isimleri o namespace de aranmasý için std::cout // þeklinde
+	  çünkü namelook up sürecinde std namespace'ine bakmayacaktý. Derleyicinin isimleri o namespace de aranmasý için std::cout // þeklinde
 	  kullanýlmasý gerekirdi. böyle isimlere qualified name denir.
 	
 	- cout << "Merhaba dunya"<<endl; ile // burada ki bitsel sola kaydýrma operatörü kullanýlmýþ ama bitsel iþlemle hiç bir ilgisi yoktur.
@@ -325,7 +325,7 @@
 	- C'de fonksiyonlar r value expression olabilir.
 
 	- C++'da geri dönüþ deðeri referans ise (int &func())  l value expressiondýr. Ama fonksiyonun geri dönüþ deðeri referans deðil ise  r value expression'dýr.
-	  Yani func() = 10; þeklinde ifade olabilir.(590, 618)
+	  Yani func() = 10; þeklinde ifade olabilir. Burada func'ýn geri dönüþ deðerinin referans olduðunu gösterir.(590, 618)
 	
 	- otomatik ömürlü bir nesneye referans ile geri dönülmesi rte'dir.referans ile dönülmesi için
 		1- statik ömürlü bir nesne ile
@@ -621,7 +621,7 @@
 
 					   func(0); çaðrýsý nullptr'e dönüþüm olduðu için error'dur.ambiguity'dir.
 					
-				    2- ) Not : nullptr'in kullanýmý burada özellikle gerekir.(nullptr sadece pointer'lara atanabilen bir sabittir.) nullptr'den sadece pointer türlerine dönüþüm vardýr.	
+				    2- Not : nullptr'in kullanýmý burada özellikle gerekir.(nullptr sadece pointer'lara atanabilen bir sabittir.) nullptr'den sadece pointer türlerine dönüþüm vardýr.	
 					
 					3- void func(int x);
 					   void func(int &x);
@@ -666,7 +666,7 @@
 		#endif
 
 		- Baþlýk dosyasýný bunu yapmalýyýz.
-	---C++'da tür dönüþtürme operatörler---
+	-------C++'da tür dönüþtürme operatörleri----------------	---
 
 	- C'deki tür dönüþtürme operatörü kullanýmý (target type= double, int,...)operand þeklindedir.
 	- C++'da amacýna baðlý olarak farklý operatörler kullanýlabilir.
@@ -781,7 +781,7 @@
 		}; //Bir definition'dýr.
 
 		- class definition'larý client'lar bu türü kullanacaksa kesinlikle baþlýk dosyasýnda olmalýdýr(Hemen her zaman baþlýk dosyasýnda olur). diðer türlü .cpp dosyasýnda bulunur.
-		- implimantasyon kullanacak ise .cpp dosyasýnda olabilir. Çoðunlukla sýnýf ile baþlýk dosyasýnýn adý ayný anlamdadýr.
+		- implimantasyon kullanacak ise .cpp dosyasýnda olabilir. Çoðunlukla sýnýf ile baþlýk dosyasýnýn adý ayný isimde olmalýdýr.
 		- baþlýk dosyasýnýn ismi de tür ismi ile ayný olabilir.
 
 		- struct Data {
@@ -938,15 +938,18 @@
 	- non-static member_func'larýn arka planda bir fazla parametresi vardýr(pointer türünden bir nesne).
 	- örneðin derleyici 
 	- mydate.set() gibi bir fonksiyonuna aslýnda parametre görsel olarak gönderilmezken arka planda mydate'in adresi gönderirilir.	  
-	- static member_func'larýn fazladan bir parametresi yoktur.
-	- çözünürlük operatörünün önceliði 1. öncelik seviyesindedir.
+	- static member_func'larda fazladan bir parametresi yoktur.
+	- çözünürlük operatörünün önceliði 1. öncelik seviyesindedir.(Hatta bu operatör en yüksek seviyeden operatör diyebiliriz.)
 	- static member function'larýn object(instance) ile hiç bir alakasý yoktur.
 
 	- global fonksiyonlarýn gizli bir parametre deðiþkeni yoktur.
 	- global fonksiyonlar'ýn C++'da public private protected ayrýmý yoktur. Ancak C'de ki bilgilerimiz ile yapabiliriz.
+	-  Global fonksiyonlar sýnýfýn private bölümüne eriþemez.
 	- C'de ki isim arama kurallarý C++'da da vardýr. Sadece üye fonksiyonlarý için isim arama kurallarý böyle deðildir.
 	- üye fonksiyonlarýn tanýmlarý kaynak dosyasýnda olacaktýr. Bildirimi baþlýk dosyasýnda bulunur.
 	- üye fonksiyonlarýn tanýmlarý kaynak dosyasýnda belirtilirken void className::func(int x, int y, int z);
+	- sýnýflarýn non-static member functionlarý için adres operatörü kullanma þartý vardýr. Myclass::func yanlýþ bir kullanýmdýr. &Myclass::func olmak zorundadýr.
+	- Ama  static veri elemanlarý için bu kullanýma gerek yoktur
 
 	- üye fonksiyonlar için arama ilk önce blok içerisinde arayacak eðer bulamazsa class içerisinde arayacaktýr.
 	- //Data.h
@@ -964,7 +967,7 @@
 	}
 	//Burada arka planta &data1->mx = x &data1->my = y &data1->mz = z; 
 
-	- bir ismi C++'da global name space'de aramanýn uniry :: operatörü kullanarak ::mx ile yapýlabilir.(2527)
+	- bir ismi C++'da global name space'de aramanýn unary :: operatörü kullanarak ::mx ile yapýlabilir.(2527)
 	- eðer mx global alanda bulanamaz ise error verecektir.
 	- maskeleme olsa bile her zaman maskelemeyi çözmenin bir yolu vardýr.
 	- bir üye fonksiyon baþka bir üye fonksiyonu çaðýrdýðýnda ikiside non-static ise aldýðý adresi diðer fonksiyona 
@@ -975,7 +978,7 @@
 
 	- Myclass::x ismi Myclass scope'unda arayacaktýr. ::x ismi sadece global alanda arayacaktýr.
 	
-	- member functiona'private yasaðý yoktur.
+	- member function sýnýfýn private bölümüne eriþebilir.
 
 	void Data::set(int x, int y, int z){
 		mx = x;
@@ -983,12 +986,30 @@
 		data1.mx = 45;
 	}
 
+
+	//.h
+	class Data {
+	
+	public:
+		void func();
+		void foo();
+	};
+
+	//.cpp
+	void Data::foo(){
+		func();//Derleyici foo fonksiyonunu hangi nesne için çaðrýrsa func fonksiyonunuda ayný nesne için çaðýracaktýr.
+	}
+
+
+
 	- ister global nesnelerin private elemanýna, ister yerel nesnelerin private elemanýna ayný sýnýfýn member fonksiyonu ile
-	eriþim geçerlidir.
-	- global fonksiyonlar için redeclaration vardýr. class member function'lar için redeclaration yoktur.(2648)
-	- function overload resolution daha önce yapýlmýþtýr. access control daha sonra yapýlýr.(2670)
-	- derleyici böyle bir func fonksiyonu olmadýðý için hata verecektir.()
-	- C++'da bir fonksiyonun tanýmý kesinlikle fonksiyonun private'mi public mi olduðunu kesinlikle bunu söylemez.
+	  eriþim geçerlidir. Yani member function sadece çaðrýldýðý nesne için deðil kendi bloðu içinde tanýtýlan herhangi bir nesne için doðrudan private bölüme eriþim imkaný sunar(2713)
+	- member function'lar için redeclaration edilmez.(2648)
+	- access kontrol C++'da her zaman en son yapýlýr.
+	- function overload resolution daha önce yapýlýr. access control daha sonra yapýlýr.(2670)
+	- derleyici böyle bir func fonksiyonu olmadýðý için hata verecektir.(2590)
+	- C++'da bir fonksiyonun definition'ý kesinlikle fonksiyonun private'mi public mi olduðunu kesinlikle bunu söylemez.
+	- Bir fonksiyonu sýnýfýn içinde tanýmlamak onu inline function yapar.
 	- Bunu sadece makrolar ile yapabiliriz.
 	#define PUBLIC
 	#define PRIVATE
@@ -997,26 +1018,29 @@
 --------------------12.11.2017	PAZAR---------------------
 
 - const member function
-	- const member function, member function'ýn nesneyi okuma amaçlý olup olmadýðýný anlarýz.
+	- const member function, member function'ýn nesneyi deðiþtirmeye yönelik mi okumaya yönelik mi olduðunu gösterecek sentaksdýr.
 	void func()const == (C'de)void func(const T *ptr);
 	void foo() == (C'de)void func(T *ptr);
+	
+	- Derleyici const member functionlarda bizim için parametresi const T * olan bir fonksiyon yazacaktýr. void func()const; --> void func(const T *ptr); þeklinde arka planda bir fonksiyon olacaktýr.
 
 
 	class Date {
 	public:
 	void display()const;
 	};
-	- Date mydate; nesnemin deðerinin okuma amaçlý kullanýlmasý için mydate.display() ile bunu bilebiliriz.
-	- client gözü ile baktýðýmýzda nesnenin öz nitelekleri deðiþtirilecekse eðer const olmamalýdýr.
-	Not : nesne yönelimli programlama da her zaman interface implementasyondan önce gelir.
+	- Date mydate; 
+	  mydate.display()//display fonksiyonu constbir fonksiyon olduðu için nesneyi okumaya yöenelik bir fonksiyondur.
+	- client gözü ile baktýðýmýzda nesnenin öz nitelekleri deðiþtirilmeyecekse eðer const olmalýdýr.
+	Not : nesne yönelimli programlama da her zaman interface implementasyondan önce gelir.//ilk olarak baþlýk dosyalarý yazýlýr. sonra içinin kod yazýlýr.
 	
-	- fonksiyonun const olup olmayacaðý tamamen problem domaini içerisinde ki gözlenebilir bir deðeri deðiþtiriyor ise
-	  const olamaz.
+	- fonksiyonun const olup olmayacaðý tamamen problem domaini içerisinde ki gözlenebilir bir deðeri deðiþtiriyor ise const olamaz.
 	
-	- ismi get olan fonksiyonlar çok özel bir durum yoksa const olmalarý çok açýktýr.
+	- ismi get olan fonksiyonlar çok özel bir durum yoksa const olmalarý gerekir.
 	
 	- derleyici void func()const; þeklinde bir fonksiyon tanýmý görürse bunun gizli  parametresinin
-		const T *ptr þeklinde olacaktýr.
+		const T *ptr þeklinde yapar.
+
 	- const bir üye fonksiyonunun içinde onun non-static bir veri elemanýný set amaçlý kullanmak sentaks hatasý
 	  olacaktýr.
 	- const anahtar sözcüðü imzanýn bir parçasý olduðundan dolayý bildirimde de tanýmda da olmalýdýr.
@@ -1027,12 +1051,10 @@
 
 	- const bir sýnýf nesnesini  sýnýfýn const olmayan bir member function ile çaðýrmak geçersizdir.
 
-	Not : T*'dan const T*'a dönüþüm yanlýþ deðildir. ne de sentaks hatasýdýr.(2799)
-
 	void func(int *p);
 	void func(const int *p);
-		- böyle bir durumda kendisi const bir nesne ile çaðýrýlýr ise const olan kendisi const olmayan bir nesne ile çaðýrýlýr
-		ise  const pointer olmayan çaðýrýlýr. Buna const overloading denir.
+		- böyle bir durumda kendisi const bir nesne ile çaðýrýlýr(const int x; ) ise const olan kendisi const olmayan bir nesne ile çaðýrýlýr
+		ise  const pointer olmayan  fonksiyon çaðýrýlýr. Buna const overloading denir.
 	------------------------------------------
 	class Myclass{
 	public:
@@ -1071,6 +1093,17 @@
 
 	- gene const T*'dan const T*'a dönüþüm olup recursive fonksiyon olur.(2995)
 
+	- Sýnýfýn const üye fonksiyonlarý içinde sýnýfýn const olmayan üye fonksiyonlarýna çaðrý yapmak legal deðildir.
+			class Myclass{ 
+			public:
+				void func()const{
+					foo();//error	
+				}
+				void foo(){
+					func();//legal
+				}
+			};
+
 	---this keyword---
 	
 	- this keyword'u sadece ve sadece sýnýflar'ýn non-static member function'larý içinde kullanýlýr.
@@ -1078,27 +1111,37 @@
 	- this poniter'ý yazmadýðýmýz parametre deðiþkenini temsil eder. Yani bu non-static fonksiyon hangi nesne için çaðýrýlýrsa
 	  this o nesne'nin pointer'ýdýr.
 	- this ile nesnenin adresi aynýdýr.
+	- bir non static member function'ýn içinde nesneye ait mx non-static data member'ý iki þekilde deðiþtirilir.
+		1- mx = 15;
+		2- this->mx = 15;
+	- Ama burada this->mx kullanýlmasýna gerekte yoktur.
+	- C++'ta gerekmedikçe this keyword'u kullanmayýn.(Sýnýfýn non-static data member'ýna eriþirken yada sýnýfýn non-static member function'ýna eriþirken)
 
-	- eðer bir fonksiyon ben hangi nesne için çaðrýldýysam o nesneyi geri döndürmek isterse bunu return *this 
-	dýþýnda yapmanýn yolu yoktur.(3104)
-	- bir sýnýfýn üye fonksiyonu hangi nesne için çaðrýlmýþ ise ve nesnenin adresini istiyor 
-	ise return this ile geri dönüþ yapabiliriz.
+	- this keyword'unu kullanmayý gerektiren bazý senaryolarvardýr.
+		1- hangi nesne için çaðrýldýysa o nesneyi döndürmesi gerekir.
+			Myclass &func(){
+				
+				return *this;
+			}
+			- *this bir fonksiyon hangi nesne için çaðrýlmýþsa o nesnenin kendisi demektir.
+	
+	- Bir nesne için çaðrýlýp o nesnenin kendisini döndürmesi çok klasik bir pattern'dir.
+	  Buda nesne'nin refereansýna geri dönmesi ve *this ile return edilmesi gerekmektedir.
+	
+	- bir sýnýfýn üye fonksiyonu hangi nesne için çaðrýlmýþ ise ve nesnenin adresini istiyor ise return this ile geri dönüþ yaparýz.
+	
 	- eðer nesnenin kendisini istiyor ise fonksiyonun geri dönüþ deðeri referens semantiði ile olup return *this olur.
 	
+	- Bir member function nesnenin kendisini geri döndürüyor ise bunun *this ile geri döndürülmesi zorunludur.
+	
+	- this default olarak top level const'tur. low level const'luðu ise tamamen const member function olup olmamasý ile alakalýdýr.
+
 	Not : this her zaman top level const bir pointer'dýr.(T *const this);
 	-this = nullptr bir //hata verecektir. 
 
-	eðer sýnýf member_function'ý const member function ise void Myclass::func()const;
-	
-	- Yani this'in low level const olup olmayacaðý bize baðlý. top level const olmasý ize zorunludur.
-
-	- Bir fonksiyonun const üye fonksiyon olmasý bu fonksiyonun sýnýf nesnesini deðiþtiremeyiz.
-	
-	- mutable anahtar sözcüðü : sýnýfýn bir veri elemaný mutable ile tanýtýldðýnda 
-	  mutable int call_cnt = 0; bu veri elemanýnýn deðiþip deðiþmemesi sýnýf nesnesinin veri elemanlarýný
-	  ile ilgili deðildir. Bunun deðiþmesi sýnýf nesnelerin deðiþmesi ile alakalý deðildir.
-	  böyle tanýtýlmýþ nesneleri const bir member_function ile de deðiþtirebiliriz.
-		 
+	 
+	- mutable anahtar sözcüðü : sýnýfýn bir non-static bir veri elemaný mutable ile tanýtýldðýnda bu veri elemanýnýn sýnýf nesnesinin gözlenebilir deðeriyle bir ilgisi yoktur.
+	  Bunun deðiþmesi sýnýf nesnesinin deðiþip deðiþmemesi ile ilgili deðildir. const üye fonksiyonlar da bu nesneyi deðiþtirebilir.	
 	-------INLINE FUNCTIONS-------
 
 	- inline expansion(inline açýlým)
@@ -1137,11 +1180,13 @@
 		};
 	};
 
-	- C++'da bir fonksiyonun implementasyonunu class içinde yapmak fonksiyonun inline function olmasýný saðlar.
+	- C'de ve C++'da global fonksiyonlarýn inline olmasý için ayný dosyada olmasý gerekir. ikisinde de inline anahtar kelimesi hem declaration hem de definition'ýn önüne gelebilir. Sadece birisine de konulabilir.
+	
+	- C++'da bir fonksiyonun implementasyonunu class içinde yapmak fonksiyonun inline function olmasýný saðlar. inline anahtar sözcüðünü koymak zorunlu deðildir.
 	
 	- fonksiyonun inline olup olmamasý fonksiyon çaðrý semantiðinde bir deðiþim göstermez.
 
-	- sýnýf içinde inline olarak açýlmamasý  isim arama kurallarýnda bir deðiþiklik yapmayacaktýr.(3238)
+	- sýnýf içinde inline olarak açýlmamasý  isim arama kurallarýnda bir deðiþiklik yapmayacaktýr. Ýsim arama kurallaro class scope'un heryerinde yapýlýr(3238)
 
 	- derleyici fonksiyonun kodunu görmemesi durumda derleyicinin bir vazife çýkartýp inline yapmasý mümkün deðildir.
 
@@ -1162,7 +1207,7 @@
 	SPECIAL MEMBER FUNCTIONS
 	(ÖZEL ÜYE ÝÞLEVLERÝ)
 	
-	constructor
+	constructor // nesneyi hayata getirme 
 		default constructor
 	destructor
 	copy constructor
@@ -1183,7 +1228,7 @@
 	- constructor çalýþmadan bir bellek alaný olabilir. ama hayata geldiði söylenemez.
 	- constructor  sýnýfýn ismi ile ayný isimli iþlevdir.
 	- derleyici constructor olduðunu bu isimden dolayý anlar.
-	- constructor geri dönüþ deðeri kavramýna sahip olmayan iþlevlerdir.(geri dönüiþ deðeri diye bir kavram yoktur.)
+	- constructor geri dönüþ deðeri diye bir kavram yoktur.
 	  Yani burada geri dönüþ deðeri yerine bir þey yazmayacaz.
 		---------------------------------------------------------
 		class Fighter{
@@ -1228,7 +1273,7 @@ Not : özel fonksiyon
 	- Dil de önce statik ömürlü nesneler hayata gelip ondan sonra main çaðrýlýr.
 	Test için g'ye bir constructor ekleyebiliriz.(3337)
 	- tanýmlanma sýrasý ile consrtructor'ýn çaðrýlmasý arasýnda garanti bir iliþki vardýr.
-	- önce çaðrýlan nesnenin constructor'ý daha önce yapýalcaktýr.
+	- önce tanýmlanan nesnenin constructor'ý daha önce çaðýralacaktýr.
 	- otomatik ömürlü yerel sýnýf nesneleri için constructor programýn akýþý oraya her girdiðin de tekrar çaðrýlacaktýr.(3388,3442, 3463)
 	- statik yerel nesnelerde durum biraz daha farklýdýr. burada bir kez çaðrýldýktan sonra bir daha constructor çaðrýlmayacaktýr.
 
@@ -1236,18 +1281,27 @@ Not : özel fonksiyon
 
 	---------------------------18.11.2017 CUMARTESÝ-----------------------------
 
-	- main.c dosyasýnýn olduðu dosyanýn ismi main.c yada driver.c adý verilir.
+	- Constructor sýnýfýn ismi ile ayný isme sahip olmasýdýr. Geri dönüþ deðeri yoktur.
+	- Constructor static function  olamaz.
+	- public protected ya da private olabilir. ama çok büyük olasýlýkla public olur.
+	- Constructor ismi ile çaðýrýlamaz.(Yani myclass sýnýfýndan üretilmiþ bir nesne m.myclass() þeklinde bir çaðrý yapýlamaz. ) 
+	- Bir argüman gönderilmeden çaðýrýlabilen constructor'a default ctor denir.(Ya parametresi olmayacak ya da bütün parametreleri varsayýlan argüman þeklinde olacaktýr. )
+	- Eðer bir tane bile ctor yazýlmýþ ise derleyici default ctor'ý yazmayacaktýr.
+	- C++11 ile gelen bir araç ile derleyiciye special  function'larýn default edilmesi için kullanýlýr. Özel fonksiyonlar C++11 ile 
+	  Myclass() = default; // fonksiyonunu derleyiciye yazýdýrýrýz.
+	- Bunu yapmanýn kendimiz'in ayný kodu yazmasý arasýnda bazý teknik farklýlýklar vardýr. 
 
+	- main.c dosyasýnýn olduðu dosyanýn ismi main yada driver adý verilir.
 	- Not : mecbur olmadýkça global nesne kullanmayýn.
 	- Farklý modüller(kaynak dosyalar) de tanýmlanmýþ statik ömürlü sýnýf nesnelerinin hayata gelme sýrasýna iliþkin dilin kurallarýnýn 
 	  bir belirleyiciliði yoktur.
 	
 	Not : Program daha baþlar baþlamaz run time da çökerse bunun nedeni global nesneler ile alakalýdýr.
 	
-	Not : C++ gibi bir dil için dizi'ler alt seviyeli kalmaktadýr. Kullanýlmasýnda herhangi bir sentaks hatasý
+	Not : C++ gibi bir dil için, C tarzý dizi'ler alt seviyeli kalmaktadýr. Kullanýlmasýnda herhangi bir sentaks hatasý
 		  olmayacaktýr. Ama kullanýlmamasý daha çok tercih edilebilir.
 		1- ya vektör veri yapýlarýný kullanýrýz.(dinamik bellek yönteminden dolayý fazlaca maaliyeti olabilir.)
-		2- yada array isimli bir sýnýf()
+		2- yada array isimli bir sarmalayýcý sýnýf(Bildiðimiz dizidir. ama sýnýf ile sarmalanmýþtýr.)
 	
 	- header file'da asla using name space kullanýlmamalýdýr.
 	
@@ -1255,6 +1309,14 @@ Not : özel fonksiyon
 	  pointer deðiþken ile constructor çaðrýlmaz.
 	
 	- referans semantiðinde de ayný durum geçerlidir.(3707)
+
+	- Bir nesne'nin constructor'ýnýn hayata gelmesi için þu yollar izlenebilir.
+		- direk olarak nesne oluþturmak(Myclass m);
+		- uniform initializer ile(Myclass m{});//C++11
+		- constructor'ýna çaðrý(Myclass::Myclass()) --> geçici bir nesne oluþturacaktýr.
+		- Nesne'yi Myclass m(); þeklinde initialize edemeyiz. bu bir function declaration olacaktýr.
+	
+	Not : C'de ve C++'da fonksiyonlar'ýn declaration'larý yerel yada global olabilir.
 
 	- default constructor
 		- parametresi olmayan yada her bir parametresi var sayýlan argüman olacak.
@@ -1266,10 +1328,11 @@ Not : özel fonksiyon
 	int y(20);
 	int z{30};
 
-	- uniform initializer ile veri kaybý olan(double'dan int'e) bir atama yapýlmasý sentaks hatasýdýr.
+	- uniform initializer ile veri kaybý olan(double'dan int'e)(narrowing conversion) bir atama yapýlmasý sentaks hatasýdýr.
 
 	--- destructor---
 
+	- bir sýnýfýn sonlandýrýcý iþlevidir.
 	- bir nesnenin hayatý bittiðinde çaðrýlýr. 
 	- ismi sýnýfýn ismi ile aynýdýr. constructor ile karýþtýrýlmamasý için ismin baþýna ~ karakteri alýr.
 	- parametresi olamaz. sýnýfýn destructor'ý parametresi olmayan bir iþlev olmak zorundadýr.
@@ -1277,7 +1340,8 @@ Not : özel fonksiyon
 	- overload edilemez. Yani bir sýnýfýn yalnýz ve yalnýz tek bir destructor iþlevi olabilir.
 	- sýnýfýn non-static üye iþlevi olmak zorundadýr.(static üye iþlevi olamaz.)
 	- public/protected/private olabilir.
-	- const member function olamaz.
+	- const member function olamaz.(~Myclass()const{} þeklinde bir uazým yoktur.)
+	- geri dönüþ deðeri kavramý yoktur.
 
 	- ismi ile çaðrýlmasý sentaks hatasý deðildir.(ileride inceleyeceðimiz tek bir durum dýþýnda ismi
 	  ile destructor iþlevini çaðýrmayýn).
@@ -1288,14 +1352,16 @@ Not : özel fonksiyon
 		3-) inline
 		bir destructor yazar.
 	
-	- sýnýflarýn çoðunluðu için destructor yazmamýz gerekmektedir. Ama destructor için bu her zaman geçerli deðildir.
+	- sýnýflarýn çoðunluðu için constructor yazmamýz gerekmektedir. Ama destructor için bu her zaman geçerli deðildir.
 	  Bu sadece sýnýf nesnesinin hayatý bitiþinde destructor'ý yazmamýz gereken en az bir neden olmasý gerekmektedir.
 	
 	- resource acquisition is initialization(RAII)(Kaynak edinimi ilk deðer verme yoluyla olur.)
 		- bazý sýnýf nesneleri iþlerini görebilmek için bazý kaynaklar kullanýr.
-		- Bu kaynaklarý constructor nesneye verirken destructor geri verecektir.
+		- Bu kaynaklarý constructor nesneye verirken destructor iade edecektir.
 	
-	- Kodunun bizim belirleyeceðimiz bir destructor RAII için kullanýlýr.
+	- özellikle yazý tutan sýnýflar için bellekte bir yer gerekmektedir. Ve bu dinamik bellek yönetimi ile yapýlacaktýr.
+	  Bu RAII ile yapýlackatýr.
+	- RAII nesneleri için kullanýcýnýn destructor'ý kendisi çaðýrmalýdýr.
 	Not : bu fonksiyonlar'ýn kodunun hiç birinin inline olma zorunluluðu yoktur.
 
 	- global sýnýf nesneleri main çaðrýlmadan hayata gelip main bittikten sonra hayatý sona erecektir.
@@ -1305,39 +1371,55 @@ Not : özel fonksiyon
 
 	Not : static yerel nesnelerde ise constructor ve destructor bir ekz çaðýrýlacaktýr.
 	
-	- eðer hayatta 2 sýnýf nesnesi varsa constructor'ý daha sonra çaðýrýlan nesnenin destructor'ý daha önce çaðrýlýr.(4134)
+	**- eðer hayatta 2 sýnýf nesnesi varsa constructor'ý daha sonra çaðýrýlan nesnenin destructor'ý daha önce çaðrýlýr.(4134)
 
-	--- Dinamik ömürlü nesneler---
+	--- Dinamik ömürlü nesneler -1  ---
 
-	- istediðimiz zaman hayata getirip istediðimiz zaman hayatýný sonlandýrabileceðimiz nesnelerdir.
+	- C++' ta en zor þey dinamik ömürlü nesnelerdir.
+	- C++'ta dinamik ömürlü bir nesne hayata geldiðinde bunun hayatýnýn bitirilmesi tamamen bizim sorumluluðumuzdadýr.
+
+	- dinaimik ömürlü nesneler istediðimiz zaman hayata getirip istediðimiz zaman hayatýný sonlandýrabileceðimiz nesnelerdir.
 	- Nesnenin hayatýnýn bitmesi de tamamen bizim sorumluluðumuzdadýr.(resource leap'le alakalýdýr.)
+
+	- dinamik bellek yönetimi dinamik ömürlü nesneyi karýþtýrmamalýyýz.
+
+
 	- otomatik ömürlü ve statik ömürlü nesnelerin storage'ýný compiler elde edilir.
 
-	- kaynak olarak kullanýlacak bellek alaný resource denir.
+	- kaynak olarak kullanýlacak bellek alanýna resource denir.
 	- örneðin necati ergin stringini gönderdiðimiz bir fonksiyonda necati ergin resource da tutulacaktýr.
+	  Burada resource ile storage'ý karýþtýrmamamýz gerekir.Resource genel olarak yazýlarýn tutulduðu bellek alanýdýr.
+	  storage ise bir nesne yaratýldýðý zaman o nesne için ayrýlacak bellek alanýnýn bulunduðu alandýr.
 
-	- otomatik ömürlü, statik ömürlü bir nesne için onun storage'ý compiler karþýlar.
-	- dinamik ömürlü nesnelerin storage'ý default olarak dinamik bellek yönetimi ile elde edilir.
-	ama zorunlu deðildir.
+	- kýsaca storage bir nesne'nin kaç byte'lýk alana ihtiyacý var ise o yerin karþýlandýðý alana denir.
+	- resource ise bir nesne'nin kullanacaðý gerekli veri'lerin alýnacaðý alan ise resources'týr.
+
+	- otomatik ömürlü, statik ömürlü bir nesne için onun storage ihtiyacýný compiler karþýlar.
+	- dinamik ömürlü nesnelerin storage'ý(run time'da elde edilir) default olarak dinamik bellek yönetimi ile elde edilir. Ama bu zorunlu deðildir. 
+
+	- dinamik bellek yönetmin de iki farklý þey gerçekleþir.
+		1- bir storage elde edilmesi
+		2- bu elde edilen storage'ýn adresini this adresi olarak alýcak bir ctor'ýn çalýþmasý
+	  
 
 	- Dinamik sýnýf nesneleri nasýl oluþturulur.
 		- C++ dilinde dinamik ömürlü nesneler operatör kullanýmý ile hayata getirilip
-		yine operatör kullanýmý ile bunlarýn hayatý sonlandýrýlýr.(4280)
+		  yine operatör kullanýmý ile bunlarýn hayatý sonlandýrýlýr.(4280)
+
 		- Burada hayata getirmek için kullanýlan operatörler new operatörleri'dir.(Birden fazla new operatörü vardýr.)
 		- nesne'nin hayatýný sonlandýrmak için delete operatörleri kullanýlýr.
 
-	- derleyici new operatörünün kullanýmýnda 
-	
 	- operator new bir fonksiyondur.(malloc benzeri bir fonksiyondur. neredeyse aynýsýdýr.)
 
+	- operator new'in kullanýlma sebebei malloc'un exception handling mekanizmasýna sahip olmamasýdýr.()
 	- void *operator new(size_t n);
 		operator new(n);
 		
 		new Fighter //ile aþaðýdaki iþlem arkada gerçekleþir.
 		(static_cast<Fighter *>(operator new(sizeof(Fighter))))->Fighter();//sadece görünüm amaçlýdýr.
 	- new ifadesi ile yeni bir nesne oluþturulduðunda 
-		 - operator new ile sizeof(size_t); n ile yer ayýrýp.
-		 - daha sonra onun için constructor'ý çaðýracaktýr.
+		 - operator new ile sizeof(size_t n); n byte'lýk yer ayýrýp bu yerin adresini this olarak kullanýp
+		 - daha sonra bu this adresi için constructor'ý çaðýracaktýr.
 		 - eðer ilave bir araç oluþturmazsak pointer  kullanmak zorundayýzdýr.
 	Not:  C++'da void * otomatik olarak baþka bir türe cast edemeyiz.
 
@@ -1357,6 +1439,16 @@ Not : özel fonksiyon
 	// her birinde auto kullanabiliriz.
 	- Fighter &f = *new Fighter; //þeklinde kullanabiliriz.
 	- Bu sentaks açýsýndan legal olsa da özel durumlar dýþýnda kullanmamalýyýz.
+	
+	- Bu nesnenin hayatýný bitirmek yetmez sadece nesne'nin hayata getirilmesi için elde edilen kaynaklar'da geri verilmedir.
+	- Burada tek sorun bellek sýzýntýsý olmayacaktýr.
+
+	- Ýleri zamanlar da dinamik ömürlü  nesneleri yönetmek için  smart_ptr kullanýlacaktýr. Kendisi de bir sýnýf nesnesidir. Ama pointer gibi kullanýlýr.
+	- unqie_ptr, shared_ptr
+
+	- delete p; expression'ý görüldüðü zaman runtime'da 
+		1- operandý  olan adresin destructor'ýna çaðrý yapacaktýr. (Yani constructor ile elde edilen kaynaklar iade edilecektir.p->~Fighter())
+		2- operator delete fonksiyonu ile nesne'nin storage'ýný geri iade edecektir.(Bellekteki storage iade edielcektir.)
 
 	----------------------------------------------------------------------------------
 
@@ -1365,26 +1457,32 @@ Not : özel fonksiyon
 	- Not : Bir nesne ile iþimiz bittiðinde o nesne'nin hayatý bitirilmelidir.
 
 	- nesnenin hayatý bitirilirken gene operatör kullanýlýr.
-	- constructor bir takým kaynaklar elde ettiðini düþünürsek , bu kaynaklarýn verilmemesi ile baþýmýza sorun açýlabilir.
+	- constructor bir takým kaynaklar elde ettiðini düþünürsek , bu kaynaklarýn verilmez ise bunlar baþýmýza sorun açýlabilir.
 	- bu kaynaklarýn geri verilmesi kullanýcý açýsýndan sadece dinamik ömürlü nesneler için geçerlidir. otomatik ömürlü ve statik ömürlü 
 	  nesneler için derleyici destructor'ý kendi çaðýracaktýr.
 	
+	- eðer ilgili nesne dinamik olmaz ise ortada hiç bir problem olmayacaktýr.
+
 	- nesneleri hayatýný bitirirken delete operatörü kullanýlýr.(operandý adres olmalýdýr.)
 	- delete operand olan adresin destrector'u çaðrýlmaktadýr. Destructor burada kullanýlan kaynaklarý geri vermektedir. resource leap.
-	- nesne'nin hayatý bitmiþtir. Ama nesne'nin kapladýðý storage'ýn geri verilmesi içinde operator delete fonksiyonu nu çaðýrýr. operator delete(p);
+	- nesne'nin hayatý bitmiþtir. Ama nesne'nin kapladýðý storage'ýn geri verilmesi içinde operator delete fonksiyonu nu çaðýrýr.// operator delete(p);
 	- derleyici new Fighter dediðinde operator new'i çaðýrýp oradan aldýðý adresi this olarak kullanýp operator new ile storage elde eder.
 	- new operator'u overload edilemez. olsa olsa, operator new function'ýný overload elde edebiliriz.
 	- böylece bellek alaný elde edilme iþlemi bizim istediðimiz þekilde gerçekleþir.
 	- C++'da operator bir keyword'dur.
-	Not : C'de anahtar sözcük olmayan bir isim kullanýrsak bu C++'da operator, new gibi anahtar sözcüklerinden dolayý hata verecektir.
+	Not : C'de anahtar sözcük olmayan bir isim kullanýrsak bu C++'da operator, new gibi anahtar sözcüklerinden dolayý hata verebilir.
 	- operator keyword'u, operator fonksiyonu dediðimiz fonksiyonlarýn kullanýlmasýnda kullanýlýr.
 	- ismi operator keyword'u ile baþlayan fonksiyonlar'a operator function olarak kullanýlýr. ve operator overload eder.
 	- cout << x; ile operator overload denilen mekanizma vardýr.
+	
 	- operator new ile malloc da ayný iþlevi görmektedir.
 	- opearator delete == free fonksiyonu ayný amaçý verir.
-	- operator new ile elde edilen bellek bloðunu geri vermek için operator delete kullanýlacaktýr.
+	- operator new ile elde edilen bellek bloðunu geri vermek için operator delete kullanýlýr.
 	- dinamik olmayan bir nesneyi delete etmek runtime hatasýdýr.
 	- destructor içinde ki this, constructor içindeki this ve aldýðýmýz dinamik nesne ayný adrese sahip olacaktýr.(4764)
+	
+	- delete'e verdiðimiz adres yanlýþ bir adres ise yada çoktan delete edilmiþ bir adres ise exception throw etmez. Standart kütüphane
+	  eðer operator new baþarýsýz olursa exception gönderecektir. 
 	- eðer constructor'ýn parametreleri var ise dinamik nesneler için 
 		1-) auto p1 = new Fighter(45);
 		2-) auto p2 = new Fighter{56};
@@ -1393,7 +1491,7 @@ Not : özel fonksiyon
 ----- M.I.L(member initializer list yada constructor initializer list) sentaksý---
 	
 	- constructor'larýn sýnýf nesnesinin non-static member'larýn bunlara ik deðer verme için kullandýðýmýz sentaksa denir.
-	  (Bir sýnýf nesnesi hayata geldiðinde onun non-static member'larýda hayata gelmektedir. )
+	  (Bir sýnýf nesnesi hayata geldiðinde onun non-static member'larýný initialize etmektir. )
 	- MIL kullanmak olunda zorunda olduðumuz bir sentaks deðildir.
 	- MIL Sentaksý sadece constructor için tanýnan bir haktýr.
 	- static data member'larýn constructor'la herhangi bir alakasý yoktur. onlar sýnýf nesnesi olmadan hatta main çaðrýlmadan önce vardýrlar.
@@ -1425,30 +1523,44 @@ Not : özel fonksiyon
 	{
 		
 	}
+	
+	- MIL sentaksýnýn kullanýldýðý yerde önce sentaksýn kodlarý çalýþacak daha sonrasýnda member'lar hayata gelmesinden sonra constructor'ýn ana bloðuna girecektir.
+	- MIL sentaksýnýn asýl kulanýmý sýnýfýn veri elemaný baþka bir sýnýf türünden ise çok sýk kullanýlacaktýr.
 	- C++'da önce öðeler hayata gelmesi gerekir. daha sonra constructor'larýn ana bloðuna girecektir.
 	- Bazý varlýklara ilk deðer vermemek sentaks hatasýdýr.
 		1- reference'lar
 		2- const'lar.
-		3- sýnýfýn elemanlarý'nýn reference olmasý durumunda (Ve burada MIL sentaksýnýn kullanýmýnda da zorunluluk vardýr.)
 	
 	- ayný durum sýnýfýn non-static data member'ý const olmasý durumunda da geçerlidir.
 		
 
-		1-) eðer sýnýfýn non-static veri elemaný reference yada const ise ilk deðer verme zorunludur.
+		1-) eðer sýnýfýn non-static veri elemaný reference yada kendisi const data member ise ilk deðer verme zorunludur.
 		2-) kalýtým(daha sonra girilecektir.)
 		3-) composition(daha sonra girilecektir.)
 	
 	- constuctor'ý yaptýracaðý tek iþ ilk deðer verme olsa bile fonksiyonun ana bloðu olmak zorundadýr.(Boþ olsa bile)
 	 Date(int d, int m, int y) : mday(d), mmon(m), myear(y){}  
 
-Not : mümkün olduðu kadar az baþlýk dosyasý include edilmelidir.
-	- C++ 11 ile birlikte uniform MIL'i uniform initializer ile de kullanabiliriz.
+Not : Bir baþlýk dosyasýmümkün olduðu kadar az baþlýk dosyasý include etmelidi.
+	- C++ 11 ile birlikte uniform MIL'i uniform initializer ile de kullanabiliriz.Hatta genel olarak kullanmalýyýz. 
+
+	- vexing parse problem : Dilin kurallarý gereði derleyici yazanlarýn tam olarak parse ederken hata yapmasýdýr. 
+	  Örneðin bazen fonksiyon bildirimi ile fonksiyon çaðýrýmý olup olmadýðýný anlayamaz
+
 
     - Bütün deðerlere ilk deðer verme gibi bir zorunluluðumuz yokken const veya reference olanlarýn hepsine vermek zorundayýz.
 
-	- MIL'deki ögelerin sýrasýnýn hayata gelip gelmemesi ile herhangi bir ilgisi yoktur. class'ýn içinde nasýl decleration edildiyse öðeler öyle hayata gelecektir.
-	- Bunu bizi ilgilendiren tek kýsmý birbirini kullanan veri elemanlarý için geçerlidir. Bunlarýn hayata gelmesi  MIL sentaksýnda ki sýra deðil
-	  her zaman bildirim de ki sýradýr.Genel de bildirim de ki sýra ile MIL sentaksýnda ki sýranýn ayný olmasý önerilir.(4968)
+	- MIL sentaksýndaki sýranýn sýnýfýn tanýmýndaki öðelerin bildirimleri sýrasýyla birebir ayný olma zorunluluðu yoktur.
+	- Burada sýnýfýn içinde nasýl declara edildiyse o þekilde hayata gelecektir. MIL sentaksýndaki kodda bu sýraya göre çalýþacaktýr.(4968) 
+	  örneðin 
+	  class Myclass{
+	  int x,y;
+		Myclass() : y{6}, x{ y }{}//Bu bir runtime hatasý olacaktýr. ilk baþta  x hayata gelip, y çöp döðeri ile kullanýlmýþtýr.
+
+	  }
+	
+	
+	
 	
 Not : C'deki size_t neyse C++'da bu çok daha fazla vardýr.
 	- runtime hatasý. (4994)
@@ -1459,12 +1571,29 @@ Not : C'deki size_t neyse C++'da bu çok daha fazla vardýr.
 		int my;
 	}
 
+	- Yukarýdaki örnek C++'da default olarak ilk deðer vermektir. Kullanýcý ilk deðer verme iþlemini unutursa bu deðerlerle initalize edilecektir.
 	- C++11'den sonra böyle bir ilk deðer verme kuralý vardýr. Var sayýlan argüman olarak almýþtýr.
-	- Bununla derleyiciye ona constructor'ý yazdýrýp mx'e MIL ile deðer verildiðini var say deriz.
-	- Derleyicinin yazdýðý default constructor'a bundan baþka bir vatsayýlan argüman ile deðer verdiremeyiz.
+	- C'de struct'ýn bildiriminde ilk deðer verme diye bir kural yoktur. 
+	- Bununla derleyiciye ona default constructor'ý yazdýrýp mx'e MIL ile deðer verildiðini var say deriz.
+		class Data {
+		int mx = 12;
+		//Derleyici default constructor'ý Data():mx{ 12 }{} þeklinde yazacaktýr.
+		
+		}
+	
+
+
+	- Derleyicinin yazdýðý default constructor'a bundan baþka bir varsayýlan argüman ile deðer verdiremeyiz.
+	- inclass initializer'da fonksiyon parantezi kullanamazken küme parantezi kullanýlabilir.
 	- int mx{20}; kullanýmý da vardýr.
 	- //inclass initializer C++11 (5095)
 
+	-class Data {
+		int mx{10};
+		int my;
+	public:
+		Data(int a) : my{ a }{} // Derleyici bu ifadeyi Data(int a) : mx{ 10 }, my{ a } {} þekline çevirecektirç
+	
 	---- COPY CONSTRUCTOR ----
 	
 	- eðer bir nesne hayata deðerini kendisi ile ayný türden bir nesneden alarak hayata geliyorsa hayata gelen nesne için copy constructor kullanýlýr.
@@ -1492,9 +1621,9 @@ Not : C'deki size_t neyse C++'da bu çok daha fazla vardýr.
 	
 	- Eðer derleyicinin yazacaðý copy constructor iþimize gelmiyorsa copy constructor'ý kendimiz yazmamýz gerekecektir.
 	- Bir çok sýnýf için copy constructor'ýn derleyici tarafýndan yazýlmasý iþimize gelecektir.
-	- derleyici n  tane constructor içinde copy constructor olduðunu parametresinden anlar	.
+	- derleyici n  tane constructor içinde copy constructor olduðunu isiminden ve parametresinden anlar.
 	  Myclass sýnýfýnýn Myclass isimli constructor'ýnýn parametrik yapýsý Myclass(const Myclass &r); þeklinde ise direk copy constructor diyebiliriz.
-	- Sýnýfýn copy constructor'ý yazýlmýþ ise mutlaka default constructor'ý yazýlmalýdýr. 
+	- Sýnýfýn copy constructor'ý yazýlmýþ ise mutlaka default constructor'ý yazýlmalýdýr. Çünkü derleyici bizim için default constructor'ý yazmayacaktýr.
 		1-)T x = y için copy constructor gösterildi(5151)
 		2-)void func(T x) için copy constructor çaðýrýldý(5189)
 		3-) T func(); için copy constructor yazýldý.()
@@ -1504,27 +1633,33 @@ Not : C'deki size_t neyse C++'da bu çok daha fazla vardýr.
 	
 	- vexing parse : programcý bir fonksiyon çaðýrdýðýnýzý zannederken dildeki anlamý bir fonksiyon bildirimidir. Böyle problemlere denir.
 	- copy constructor bir nesne hayata gelirken deðerini kendisi gibi ayný türden bir  nesneden alýrken çaðýrýlýr.
-	  1-) açýk ilk deðer verme sentaksý ile
-	  2-) call by value fonksiyon çaðrýlarýnda. Fonksiyonun parametresi bir sýnýf türünden. Argüman olan sýnýf nesnesi parametre deðiþkenine ilk deðerini verecek. Parametre deðiþkeni için copy constructor çaðrýlýr.
-	  3-) geri dönüþ deðeri T(T* yada T & deðil) türünden olan fonksiyonlar için. fonksiyonun geri dönüþ deðerini tutacak nesneye yapýlan çaðrý için tutulur.
+		 1-) açýk ilk deðer verme sentaksý ile--> Name myname{ myname1 };
+		 2-) call by value fonksiyon çaðrýlarýnda. Fonksiyonun parametresi bir sýnýf türünden. Argüman olan sýnýf nesnesi parametre deðiþkenine ilk deðerini verecek. Parametre deðiþkeni için copy constructor çaðrýlýr.
+		 3-) geri dönüþ deðeri T(T* yada T & deðil) türünden olan fonksiyonlar için. fonksiyonun geri dönüþ deðerini tutacak nesneye yapýlan çaðrý için tutulur.
 	- Eðer copy constructor yazmaz isek derleyicinin bizim için yazdýðý copy constructor atanan nesnenin her bir öðesi, hayata gelen nesnenin her bir öðesi ile karþýlýklý elemaný ile hayata getirir.(MIL sentaksý ile)
+	
 	- Öyle durumlar olacak ki copy constructor yazma zorunluluðu olacaktýr.
+	
 	- Copy constructor çaðrýldýðýný geri dönüþ deðeri için gösterdik(5377)
+	
 	- copy constructor açýk ilk deðer verme için gösterildi(5384)
+	
 	- call by value fonksiyon çaðrýsý ile copy constructor(5424)
-	- value semantics(iki nesnenin deðerleri aynýdýr. Birinde bir deðer deðiþikliði yaparsan diðerinde deðer deðiþikliði olmaz.)
-	- uygulanan value semantic ise copy constructor'ý derleyiciye yazdýrmamýz çok normal olur.
-	- derleyicinin yazdýðý kopyalamaya shellow copy(sýð kopyalama) yada member while copy
+	
+	- value semantics(iki nesnenin deðerleri aynýdýr. Birinde yapýlan deðiþiklikten diðerine yansýmaz.)
+	- uygulanan value semantic ise copy constructor'ý derleyiciye yazdýrabiliriz.
+	- derleyicinin yazdýðý kopyalamaya shellow copy(sýð kopyalama) yada member while copy(Member'larý karþýlýklý olarak kopyalama)
 	- öðelerin handle olmasý durumunda pointer'larý birbirine kopyalamak deðil öðeleri birbirine kopyalamak gerekir.(deep copy)
 	- Eðer RAII nesneleri söz konusu ise biz kaynaklarý paylaþmalarýný istemiyorsak copy constructor'ýný kendimiz yazmalýyýz. Kendimiz yazmaz isek rte olur.
 	- copy constructor'ýn çaðrýlmasý duruma göre çok yüksek maaliyetli bir iþlemde olabilir. 
 	- RAII nesneleri söz konusu olduðunda copy constructor'ýn çaðrýlmasý çok büyük bir maaliyet alacaktýr.
 	- RAII nesnerlerinin kaynaklarý ortak olduðundan dolayý eðer bizim yapacaðýmýz bir iþlemden dolayý nesnelerden birinin hayatý diðerine göre daha erken biterse
 	  bu durumda diðer nesne'nin de kaynaklarý boþa çýkacaktýr. Ve o nesne'nin kullanýmý bizim için bir run time hatasýna neden olacaktýr.(5466, 5515)
-    - kod da  a1 sýnýf türünden nesne için girilen karakter'in bir fazlasý kadar karakter'lik bir nesne için MIL sentaksý ve dinamik bellek yönetimi ile 
-	  yer elde edilecektir. Sonrasýnda a nesnesi func'a argüman olarak gönderildiðinde burada func'ýn paramtetresi olan a ile a1 ayný nesneyi gösterip  func'ýn sonunda a nesnesinin
-	  gösterdiði dinamik bellek(heap) boþaltýlacaktýr(destructor ile). ve bu yerin kullanýmý bizim için run time hatasýna neden olacaktýr.(5515)
-	
+    
+	- Biz RAII nesneleri için bir copy constructor yazmak istiyorsak burada kopyalama yapýlan nesne için yeni bir kaynak elde etmeliyiz. Biz bu kaynaðý elde etmez isek
+	  iki nesne ayný kaynaklarý kullanacak ve eðer nesnelerden biri hayata daha önce veda edip kaynaklar geri iade edilirse hayatta olan nesne ile geri verilen kaynaðý
+	  kullanmamaýz run time hatasý olacaktýr.
+
 	- bu sýnýfý non-copy bir sýnýf olarak sunabiliriz. bir kopyalama iþlemi runtime deðil compile time hatasý yaptýrabiliriz.   
 	- ileride öðreneceðimiz tekniklerden dolayý ostream sýnýfý kopyalamaya kapatýlmýþtýr.
 	- standart kütüphane'nin yaptýðý gibi bazý sýnýflarý kopyalamaya kapatabiliriz.(Ancak böyle yaparak kullaným alanýný daraltýrýz.)
@@ -1547,7 +1682,7 @@ Not : sýnýfýn üye fonksiyonlarý sýnýfýn private bölümüne eriþebilir.
 		- Burada anlam þu bu fonksiyon var ama bunlara yapýlan çaðrýlar sentaks hatasý olsun.(5851)
 		- Bu fonksiyon function overload resolution'a katýlmaktadýr.ve derleyici function overload resolution'ýn sonucunu da alýr. ama fonksiyon delete edilmiþ ise hata verir.
 		- Yani bir fonksiyonu belirli bir argüman ile çaðrýlmasýný saðlamýþ oluruz.
-	- Bir fonksiyonu sadece bir tür ile çaðýrýlýð diðer türler ile çaðrýlmasýný engellemek için þablonlar kullanýlýr. 
+	- Bir fonksiyonu sadece bir tür ile çaðýrýlýþýna izin verip,  diðer türler ile çaðrýlmasýný engellemek için þablonlar kullanýlýr. 
 	- fonksiyon þablonu : derleyicinin fonksiyon kodunu yazmasýný saðlayan bir meta koddur.
 	- standartlar bir fonksiyon þablonuyla beraber bir gerçek fonksiyon ayný scope da bulunursa  gerçek fonksiyon o belirli türden bir argüman ile çaðýrýlablir.(5905)
 	- delete'de yukaridaki amaç için kullanýlabilir.
@@ -1596,7 +1731,7 @@ Not : operator fonksiyonlarý member function olmak zorunda deðildir.
 		- bir nesnenin hayatýnýn bitmesi ile boþalacak bellek alanýnýn geri verilmesi yerine onun baþka bir nesne tarafýnda kullanýlmasýdýr.
 		- C++11 öncesi gereksiz kopyalama iþlemleri derleyicinin belirli bir kýsýtta kodu optimize etmesi ile yapýlmaktadýr. 
 		- derleyici dilin kurallarýna göre  hayatý bitmekte olan bir  nesnenin baþka bir nesneye kopyalandýðý yada atandýðýný görse sýnýfýn özel bazýfonksiyonlarýna çaðrý yapmaktadýr.
-		  bu fonksiyonlar kaynaðý geri verip yeni kaynak edinmek yerine sadece handle'larý kopyalýyorlar. 
+		  bu fonksiyonlar kaynaðý geri verip yeni kaynak edinmek yerine sadece handle()'larý kopyalýyorlar. 
 		  bu fonksiyonlara move constructor denilir(Taþýyan kurucu iþlev denir).
 		- eðer atama yolu ile kopyalama yapýlýr ise ona da (move assignment operator function denir).
 		
@@ -2008,11 +2143,11 @@ Not : L value expression sað taraf referansýna baðlanamaz.sentaks hatasýdýr.cons
 			- ok operatörü
 			- köþeli parantez operatörü
 		
-		3-) operatör overloading mekanizmasýnda operatörlerin arity'sini deðiþtiremeyiz. Yani binary operatörleri binary olarak uniry operatörleri uniry olarak kullanmalýyýz.
+		3-) operatör overloading mekanizmasýnda operatörlerin arity'sini deðiþtiremeyiz. Yani binary operatörleri binary olarak unary operatörleri unary olarak kullanmalýyýz.
 			- binary bir operatör member operatör fonksiyonu olarak çaðrýldýðýnda burada her zaman sol taraftaki operandý *this olarak alýnýr.binary operatörün sað operandý da 
 			parametre deðiþkenine gönderilen argüman olacaktýr.
 			- binary bir operatör member function olarak yüklendiðinde 1 parametresi olmak zorunda global ise 2 tane parametresi olmak zorundadýr.
-			- uniry bir operatör member function olarak yüklendiðinde fonksiyonun parametresi olmayacak, global ise bir tane parametresi olmak zorundadýr.
+			- unary bir operatör member function olarak yüklendiðinde fonksiyonun parametresi olmayacak, global ise bir tane parametresi olmak zorundadýr.
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------10.12.2017 PAZAR---------------------------------------------------
@@ -2144,7 +2279,7 @@ Not : x bir map nesnesi ise eðer x["asdasd"]; eðer böyle bir associative array y
 		- member function olarak yazýlacaktýr. 
 		
 	3-) ->(ok operatör fonksiyonu)
-		- ok operatörü binary bir fonksiyon iken uniry bir fonksiyonmuþ gibi görülür
+		- ok operatörü binary bir fonksiyon iken unary bir fonksiyonmuþ gibi görülür
 		- a->b demek a.operator->()->b; demektir. 
 		- bir sýnýfýn ok operatör fonksiyonu baþka bir sýnýfýn ok operatör fonksiyonunu çaðýrabilir.
 		- dinamik nesneleri MyclassPtr gibi sýnýf nesnesinden bir nesneye baðlayarak hayatýný sonlandýrabiliriz(10133);

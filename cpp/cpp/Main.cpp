@@ -1,25 +1,59 @@
 #include <iostream>
+#include <string>
+#include "name.h"
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <iterator>
+#include <list>
+
+#include "nutility.h"
+
 using namespace std;
 
-class Myclass {
-	static int x;
+class Address {
+	size_t mlen;
+	char *mp;
 public:
-	void func() {
-		cout << "func" << endl;
+	Address(const char *pa) : mlen{ strlen(pa) }, mp{ new char[mlen + 1] }
+	{
+		strcpy(mp, pa);
 	}
-	void func() const {
-		cout << "const func" << endl;
+
+	~Address()
+	{
+		delete[]mp;
 	}
+
+	void print()const
+	{
+		std::cout << "Adres = " << mp << endl;
+	}
+	size_t getlen()const
+	{
+		return mlen;
+	}
+	///
 };
 
+void func(Address a)
+{
+	std::cout << "func cagrildi\n";
+	a.print();
+	std::cout << "func sona erdi\n";
+	getchar();
+}
 
 int main()
 {
-	Myclass myclass;
-	const Myclass myclass1;
+	Address a1{ "Necati Ergin Astoria Plaza Kat 27 Esentepe" };
+	cout << a1.getlen() << endl;
+	a1.print();
+	func(a1);
 
-	myclass.func();
-
-	myclass1.func();
-
+	a1.print();
 }
+
+
+
+
