@@ -1,6 +1,2 @@
-﻿  Generating code
-  0 of 16 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  cpp.vcxproj -> C:\Users\baspi\Desktop\git_cpp\csd-cpp\cpp\Release\cpp.exe
+﻿  Main.cpp
+Main.cpp(32): error C2664: 'void foo(Myclass &)': cannot convert argument 1 from 'Myclass *' to 'Myclass &'

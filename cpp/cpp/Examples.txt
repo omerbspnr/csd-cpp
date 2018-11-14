@@ -6596,7 +6596,7 @@ int main()
 	Myclass m;
 	func(m);
 	func(Myclass());
-	func(foo());   //Rvalue ref
+	func(foo());   //	Rvalue ref
 	func(g());		//L value ref
 }
 
@@ -6775,6 +6775,7 @@ public:
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+26 Kasým Pazar
 #include <iostream>
 #include <string>
 #include <cstring>

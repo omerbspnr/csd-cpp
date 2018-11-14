@@ -14,7 +14,6 @@ constexpr size_t asize(T(&a)[size])
 	return size;
 }
 
-inline int func();
 
 
 #endif

@@ -699,7 +699,6 @@
 
 		-static_cast ile randomize iþlevi : srand(static_cast<unsigned>(time(nullptr))); þeklinde olabilir.(2067)
 		Not : unsigned ile unsigned int arasýnda herhangi bir fark yoktur.
-		
 		- Bu uzun diye sakýn C'deki type cast'i kullanma.
 
 		- const_cast örneði(2116)
@@ -720,7 +719,7 @@
 		- C++'da da bir nutility.h oluþturuldu.(sl)
 
 
-		Not : using namespace std; implementasyon dosyalarý içindir. Baþlýk dosyalarýnda gerek yoktur.
+		Not : using namespace std; implementasyon dosyalarý içindir. Baþlýk dosyalarýnda gerek yoktur. Eklenmemelidir.
 		--------------------------------------------------------------------------------------------------------------------------------------
 
 	--------------------------------11.11.2017 CUMARTESÝ------------------------------------
@@ -1648,7 +1647,7 @@ Not : C'deki size_t neyse C++'da bu çok daha fazla vardýr.
 	
 	- value semantics(iki nesnenin deðerleri aynýdýr. Birinde yapýlan deðiþiklikten diðerine yansýmaz.)
 	- uygulanan value semantic ise copy constructor'ý derleyiciye yazdýrabiliriz.
-	- derleyicinin yazdýðý kopyalamaya shellow copy(sýð kopyalama) yada member while copy(Member'larý karþýlýklý olarak kopyalama)
+	- derleyicinin yazdýðý kopyalamaya shellow copy(sýð kopyalama) yada member whise copy(Member'larý karþýlýklý olarak kopyalama)
 	- öðelerin handle olmasý durumunda pointer'larý birbirine kopyalamak deðil öðeleri birbirine kopyalamak gerekir.(deep copy)
 	- Eðer RAII nesneleri söz konusu ise biz kaynaklarý paylaþmalarýný istemiyorsak copy constructor'ýný kendimiz yazmalýyýz. Kendimiz yazmaz isek rte olur.
 	- copy constructor'ýn çaðrýlmasý duruma göre çok yüksek maaliyetli bir iþlemde olabilir. 
@@ -1664,7 +1663,11 @@ Not : C'deki size_t neyse C++'da bu çok daha fazla vardýr.
 	- ileride öðreneceðimiz tekniklerden dolayý ostream sýnýfý kopyalamaya kapatýlmýþtýr.
 	- standart kütüphane'nin yaptýðý gibi bazý sýnýflarý kopyalamaya kapatabiliriz.(Ancak böyle yaparak kullaným alanýný daraltýrýz.)
 	- Copy constructor'ý private bölümüne alarak ta access kontrol ile eriþimi engelleyeibiliriz(5757). Fakat bu yöntemin sýnýfýn kendi kodlarý içindeki kopyalamaya engel olamayýz.(5787)
+
 Not : sýnýfýn üye fonksiyonlarý sýnýfýn private bölümüne eriþebilir.
+
+	- ostrem, istream, unique_ptr sýnýflarý kopyalamaya kapatýlmýþtýr
+	- Bir sýnýfýn copy constructor'ý yazýlýrken her zaman parametrik yapýsý derleyicinin yazdýðý const T & türünden yazýlýr.
 --------------------------------------------------------
 	--- iþlevlerin default ve delete edilmesi
 --------------------------------------------------------
@@ -1672,9 +1675,13 @@ Not : sýnýfýn üye fonksiyonlarý sýnýfýn private bölümüne eriþebilir.
 	- C++ 11 ile gelen iki araç vardýr. Ýþlevleri default, ve delete etmek.
 	- Ýþlevlerin default edilmesi special member function'lara tanýnan bir özelliktir.
 	- delete edilmesini ise herhangi bir  function'a yapabilir.
+
 	- Myclass() = default; // since C++11 ile default edebiliriz.(ileri de daha fazla deðineceðiz.)
 	- Derleyiciye burada özel olarak default constructor'ý nasýl yazman gerekiyorsa öyle yaz demektir.
-	- ileri de karþýlacaðýmýz durumlar da derleyici  default constructor'ý yazmayacaðý anlamýna gelir.
+	
+	- ileri de karþýlacaðýmýz durumlar da derleyici  default constructor'ý yazmayacaðý anlamýna gelir.Bu sentaks ile
+	  de derleyiciye normal koþullarda yzmýyorsun ama þu an benim için yaz isteðinde bulunuyoruz. Örneðin biz copy constructor'ý
+	  yazdýðýmýz zaman derleyici default constructor'ý yazmayacaktýr. derleyiciye bunu default ettirebiliriz.
 	
 	- Bir fonksiyonun delete edilmesi
 		- herhangi bir fonksiyona tanýnan bir haktýr.
@@ -1682,75 +1689,113 @@ Not : sýnýfýn üye fonksiyonlarý sýnýfýn private bölümüne eriþebilir.
 		- Burada anlam þu bu fonksiyon var ama bunlara yapýlan çaðrýlar sentaks hatasý olsun.(5851)
 		- Bu fonksiyon function overload resolution'a katýlmaktadýr.ve derleyici function overload resolution'ýn sonucunu da alýr. ama fonksiyon delete edilmiþ ise hata verir.
 		- Yani bir fonksiyonu belirli bir argüman ile çaðrýlmasýný saðlamýþ oluruz.
+	
 	- Bir fonksiyonu sadece bir tür ile çaðýrýlýþýna izin verip,  diðer türler ile çaðrýlmasýný engellemek için þablonlar kullanýlýr. 
+		template<typename T>
+		void func(T x) = delete;
+
+		void func(int x); //Burada fonksiyonu sadece int türden bir nesne ile çaðýrabileceðiz.
 	- fonksiyon þablonu : derleyicinin fonksiyon kodunu yazmasýný saðlayan bir meta koddur.
+	
 	- standartlar bir fonksiyon þablonuyla beraber bir gerçek fonksiyon ayný scope da bulunursa  gerçek fonksiyon o belirli türden bir argüman ile çaðýrýlablir.(5905)
-	- delete'de yukaridaki amaç için kullanýlabilir.
-	- kopyalanamayan sýnýf nesneleri olsun istiyorsak copy constructor'ý delete etmeliyiz.(5935)
-	- bir sýnýfa copy constructor yazmak nasýl anlaþýlýr
+	
+	- sýnýf nesneleri kopyalanmasýn istiyorsak copy constructor'ý delete etmeliyiz.(5935)
+	
+	- bir sýnýfa copy constructor yazmamýz gerektiði nasýl anlaþýlýr
 		1-) bir sýnýf için destructor yazmamýzý gerekteren nedenler varsa, copy constructor'ý da yazmalýyýz.
 		    eðer destructor yazýyorsak belirli kaynaklarý geri vereceðimizdendir(RAII sýnýfý). copy constructor yazmaz isek de kaynaklar da paylaþýlacaktýr.
+
 	Not : bir sýnýf için destructor yazarsak orada yüzde 90 ya bir copy constructor yazacaðýz yada non-copy constructable bir sýnýf olmalýdýr
 	      Yani kopyalama yoluyla oluþturulamayan bir sýnýf nesnesi oluþturmalýyýz.
+
 	- C++'da ayný türden sýnýf nesneleri birbirine atandýðýnda yine bir fonksiyon çaðrýlýyordur.
 	- Sýnýfýn her zaman özel bir fonksiyonu tarafýndan yapýlýr. ismi atama operator fonksiyonudur. ama sentaks da ki ismi operator keywordu ve onu izleyen = operatörü.
-	- Yani sentaksý Myclass &operator = (const Myclass &r); // þeklinde bir interface'e sahiptir.
+	
+	- Derleyicinin yazdýðý atama operatör fonksiyonunun sentaksý Myclass &operator = (const Myclass &r); Her zaman bu þekildedir.
+	
 	- Constructor ile karýþtýrmamalý. Zaten iki nesne de hayattadýr.
 	- sýnýfýn non-static member function'ýdýr. Bir nesne * this olarak kullanýlacaktýr. atama operatörünün sol tarafýndaki nesnedir diðer nesne de bu fonksiyona argüman olarak gönderilecektir.(5969, 6042).
-	- Bir sýnýfýn atama operator fonksiyonu olmak zorundadýr. Eðer biz yazarsak bir sýnýf nesnesine ayný türden baþka bir nesne atandýðýnda bizim yazdýðýmýz fonksiyon çalýþacak.  
+	- Bir sýnýfýn atama operator fonksiyonu olmak zorundadýr. Eðer biz yazarsak bir sýnýf nesnesine ayný türden baþka bir nesne atandýðýnda bizim yazdýðýmýz fonksiyon çalýþacak.Bu da gene RAII nesneleri için 
 	- derleyici iki sýnýf nesnesinin karþýlýklý birbirine operator sentaksý ile atandýðýný gördüðünde bunu atamaoperator fonksiyonuna yapýlan çaðrýya dönüþtürür.	
 	- derleyicinin sýnýf için yazdýðý atama operator fonksiyonu sýnýfýn
 		1-) non-static
 		2-) public
 		3-) inline bir function'dýr.
-	- Atama fonksiyonlarýnýn bir geri dönüþ deðeri vardýr. Constructor gibi deðildir. Ve bu geri dönüþ deðerini bir çok durumda kullanacaðýzdýr. 
+	- Atama fonksiyonlarýnýn bir geri dönüþ deðeri vardýr. Constructor gibi deðildir. Ve bu geri dönüþ deðerini bir çok durumda kullanacaðýz. 
 	- derleyicinin yazdýðý atama fonksiyonun geri dönüþ deðeri sýnýf türünden & döndürecektir.
-	- hatta fonksiyon *this döndürecektir. Yani  a = b; gibi bir ifadenin deðeri a'dýr.
+	- hatta fonksiyon *this döndürecektir. Yani  a = b  gibi bir ifadenin deðeri a'nýn kendisidir.
+
 	- derleyicinin yazdýðý atama operator fonksiyonu *this'in her bir öðesine argüman olan nesnenin ilgili elemanýnýn atanmasýdýr.(6042)
+	
 	- Class türünden olan iki nesne a, b için a = b; atamasý ile a.operator=(b);  ayný iþlemi yapmaktadýr.
+	
 	- eðer ortak kaynak kullanýmý söz konusu olacak ise atama operator fonksiyonunu yüksek ihtimal ile kendimiz yazmamýz gerekecektir.
 	- derleyici atama operator fonksiyonun geri dönüþ deðerinin üzerinde bir kýsýtlama koymamaktadýr.
 	- çok özel durumlar dýþýnda atama operator fonksiyonu *this döndürsün.
+	
 	- kendi kaynaðýný kullanmayacaðýndan dolayý o kaynaðý geri  vermesi lazým. bu yüzden delete ile bu kaynaklar geri verilmelidir.(6132)
-	- bir sýnýfýn destuctor'ýný yazmak için bir neden varsa çok büyük olasýlýkla copy constructor'ýn ve atama operator fonksiyonun(assignment operator function) yazýlma gerekliliði de vardýr.(Big three deniliyordu.)
-	  çok istisnai durumlar haricinde biri yazýldýðýnda diðerleri de yazýlmalýdýr.
+	
+	- bir sýnýfýn destuctor'ýný yazmak için ortada bir neden varsa çok büyük olasýlýkla copy constructor'ýn ve atama operator fonksiyonun(assignment operator function) yazýlma gerekliliði de vardýr.(Big three deniliyordu.)
+	  çok istisnai durumlar haricinde biri yazýldýðýnda diðerleri de yazýlmalýdýr. Bunlar çok istisnai durumlarý sayýlmaz ise hep bir arada olan fonksiyonlardýr
+	- Big three(destructor, copy constructor, assignment opeartor function)
 	- big three önceden kullanýlan bir terim olup. artýk big five denilen ayrýca iki tane daha fonksiyonu yazmamýzý gerektirecek durumlar olacaktýr. üçü kesin olarak yazýlacak ve iki tane daha yazýlacaktýr.
-	  C++11 ile gelen iki fonksiyon vardýr.
-    
-	- ayný nesneyi birbirine atamaya self assignment denir. self assignmet'ý biz doðrudan yapmasakta bir fonksiyona argüman olarak gönderildiðinde fonksiyon bunu kendisi arka da yapmaktadýr.
+	  C++11 ile gelen iki fonksiyondur.(destructor, copy constructor, assignment operator function, move constructor, move assignment function) 
+	- C++'11 in en büyük semantik farklýlýðý bu fonksiyonlardýr.
+
+	- ayný nesneyi birbirine atamaya self assignment denir. self assignmet'ý biz doðrudan yapmasakta bir fonksiyona argüman olarak gönderildiðinde fonksiyon bunu kendisi arka planda  yapabilmektedir.
+	
+	- C++'ta bir çok fonksiyon birden fazla parametreye sahiptir ve birden fazla nesne'nin kendisini almaktadýr. Bu fonksiyonlar bazý iþlemleri yapabilmek için parametreleri birbirine atýyor. bizde bu fonksiyonlarýn
+	 farklý parametlerine ayný nesneyi geçmemiz gerekir. Burada self assigment doðar. gene raii nesnelerinde atama operator fonksiyonunun iþini dzügün yapabilmesi için içeride adresleri kopyalamalýyýz. 
+
 	- self assingment bir lojik hata olmak zorunda deðildir.
+	
 	- Yazdýðýmýz sýnýflar'ý bir self assignment'a tabi tutulduðunda bir run time hatasýna girmemelidir. Yani ortada bir kaynak kullanýmý olup biz self assignment'a karþý bir tedbir almaz isek sonu rte olur.
+	
 	- bunu engellemek için self assingment olup olmadýðýný kontrol ederek iþlemimizi yaparýz.(6211->6239)
+	
 	- atama opretator fonksiyonun kodu genel olarak þöyle yapýlabilir. release source ve ardýndan deep copy(öðelerin handle olmasý durumunda poniter'larýn deðil öðelerin birbirine kopyalanmasýdýr).
+
+
 	- copy and swap idiomu da atama operator fonksiyonunun yazýlmasý için kullanýlabilir(ileride göreceðiz).
+
 	- atama operator fonksiyonu special member function'dýr. atama operator fonksiyonu dýþýndaki(<, >, <=, >=) gibi operator fonksiyonlar special member function deðildir.
+	- sýnýfýn atama operator fonksiyonlarý derleyici tarafýndan yazýlan tek fonksiyondur.
 Not : operator fonksiyonlarý member function olmak zorunda deðildir. 
 	
 	---------- move semantics(taþýma semantiði)--------- 
 		- bir dilin verimini etkilyen çok büyük bir araçtýr.
 		- bir nesnenin hayatýnýn bitmesi ile boþalacak bellek alanýnýn geri verilmesi yerine onun baþka bir nesne tarafýnda kullanýlmasýdýr.
 		- C++11 öncesi gereksiz kopyalama iþlemleri derleyicinin belirli bir kýsýtta kodu optimize etmesi ile yapýlmaktadýr. 
-		- derleyici dilin kurallarýna göre  hayatý bitmekte olan bir  nesnenin baþka bir nesneye kopyalandýðý yada atandýðýný görse sýnýfýn özel bazýfonksiyonlarýna çaðrý yapmaktadýr.
-		  bu fonksiyonlar kaynaðý geri verip yeni kaynak edinmek yerine sadece handle()'larý kopyalýyorlar. 
+		- derleyici dilin kurallarýna göre  hayatý bitmekte olan bir  nesnenin baþka bir nesneye kopyalandýðý yada atandýðýný görse sýnýfýn özel bazý fonksiyonlarýna çaðrý yapmaktadýr.
+		  bu fonksiyonlar kaynaðý geri verip yeni kaynak edinmek yerine sadece handle'larý kopyalýyorlar. 
 		  bu fonksiyonlara move constructor denilir(Taþýyan kurucu iþlev denir).
 		- eðer atama yolu ile kopyalama yapýlýr ise ona da (move assignment operator function denir).
 		
 		- C++11'den sonra bütün standart kütüphane taþýma semantiðini destekleyecek þekilde deðiþtirilmiþtir.
 		
-		- dile yeni eklenen R value reference'lar vardýr. &&r;
+		- dile yeni eklenen R value reference'lar vardýr(&&r).  Eklenmesinin asýl sebebi taþýma semantiðini implemente edilmesidir.
 		- R value reference dilin temel sentaksýna yapýlan çok önemli bir eklemedir.eklemenin yapýlmasýnýn nedeni 2 tanedir.
-			1-) dilin sentaksý kopyalama yapýalcaksa kopyalama kodunu taþýma yapýlacaksa taþýma kodunu seçmesine izin veriyordu. R value reference ile 
+			1-) dilin sentaksý kopyalama yapýlacaksa kopyalama kodunu taþýma yapýlacaksa taþýma kodunu seçmesine izin veriyordu. R value reference ile 
 			    dil taþýma semantiðine kavuþmuþtur
 			2-) iki tane C++11 öncesi desteklenmeyen yapýnýn desteklenmesini mümkün kýlmak için R value reference dile eklenmiþtir.
 		
-		- ister sol ister sað referansý olsun ikisi de nesne'nin yerine geçer. ikisinin farký sol taraf referansý l value expression olan bir nesnenin yerine
-		  sað taraf referansý r value bir nesnenin yerine geçer.
+		- T x; T &r = x; burada ki reference lvalue reference'dýr.
+		- sað taraf referansý ise T &&r =x; þeklinde implemente edilir.
+
+		- ister sol ister sað referansý olsun ikisi de nesne'nin yerine geçer.
 		
-		- sol taraf referansýna sað taraf deðeri ile deðer vermek ve tersi sentaks hatasýdýr.tersi de sentaks hatasýdýr.
+		- sol taraf referansý lvalue expression olan bir nesne'nin yerine geçerken sað taraf referansý rvalue olan bir nesnenin yerine geçer.
+
+		- C++' da rvalue, lvalue tanýmý C'ye göre tamamen farklýdýr. bazý baþka kategoriler vardýr.(örneðin xvalue(ölmekte olan bir rvalue nesne için kullanýrlýr))
+
+
+		- sað taraf referansýna sol taraf ile ilk deðer vermek sentaks hatasýdýr.
+
 
 		-  bir fonksiyon t türüne geri dönüyorsa, r value expression'dýr. Ama reference döndürüyor ise l value expression'dýr.
 		   Myclass func();// R value expression döndürür
 		   Myclass &foo();// L value expression döndürür
+		
 
 
 		- Bir fonksiyonun parametresi const T & ise bu fonksiyon R value expression ile çaðýrýlabilir.
@@ -1758,6 +1803,7 @@ Not : operator fonksiyonlarý member function olmak zorunda deðildir.
 		  Myclass(const Myclass &r);//copy constructor
 		  Myclass(Myclass &&r);
 			
+		- t &&(r value) ile const t &(const l value ref)'e  paremetresine sahip iki farklý fonksiyonun r value reference ile çaðrýlmasý ambiguity hatasý deðildir.
 		- r value ref'in const l value ref'e seçiçiliði vardýr.(6583)
 		- sað taraf referansý ile belirtilen bir nesnenin hayatý bir süre sonra biteceðine iþarettir.
 		- bu yüzden de copy constructor ve move constructor'ýn bir arada olmasý sentaks hatasý olmayacaktýr.(6616);
@@ -1767,57 +1813,96 @@ Not : operator fonksiyonlarý member function olmak zorunda deðildir.
 		  L value expression ise copy assignment operator function çaðýrýlýr. Eðer R value expression ile çaðýrýlýp move assignment function yazýlmamýþ ise
 		  copy assignment funct3-ion çaðýrýlacaktýr.
 		- eðer kopyalamaya maaliyeti taþýma yoluyla azaltýlabilecek bir sýnýf ise taþýma constructor'ý yazýlmalýdýr.
-		  
+		 
+		- R value ref'in function overload'de l value ref'e üstünlüðü olduðu için bunu sýnýfýn içinde de kullanabiliriz. Burada r value ref ile yazýlan constructor'a move constructor denir.
 
+
+		- Myclass(const Myclass &r);//copy constructor;
+		- Myclass(Myclass &&r);//move constructor;
+		- Myclass& operator=(const Myclass &r)//copy assignment
+		- Myclass & operator=(Myclass &&r)// move assignment 
+
+		- move constructor'ý yazmamýz gene öncesinde destructor yazýlmýþ olmalý.(Yani kaynak kullanýmý gereklidir.)
+		
+		- Bir kaynak kullanýmýnda destructor'da kaynaklarý çalýnan nesne'nin.(6758->destructor kodu)
+
+		-  
+		
 	------------------------------------------------------------------------------------------------------------------------------------------------
 		
 	---------------------------26.11.2017 PAZAR--------------------------------
 
-	- Myclass(const Myclass &r); //copy ctor
-	- Myclass(Myclass &&r); //move ctor
-	- Myclass &operator=(const Myclass &r); //copy assingment;
-	- Myclass &operator =(Myclass &&r);//move assignment;
+	- Bir fonksiyona argüman gönderirken referans semantiði iþimizi görüyor ise her zaman referans smeantiðine göre implemante etmeliyiz.
+	- Eðer fonksiyon herhangi bir neden ile bir nesneyi kopyalayak deðerini alacak ise o zaman(l value reference bir nedenden dolayý olmuyorsa ikinci bir þans vardýr.)
+		1- fonksiyonun parametresi sýnýf türünden olsun demek(void func(Myclass x))
+		2- sað taraf refereansý yapmak;(void func(const Myclass &r); yada void func(Myclass &&r))
+	
+	- r value reference bir r value expression'ý gösterir.
+	- l value reference bir l value expression'ý gösterir.
+	- l value nesne'ler r value reference'a baðlanamaz.
+	- r value ile hem r value reference hem de l value reference parametresine sahip fonksiyonlar çaðýrýlabilir.
 
+	- Not : ilk deðer verme ile karýþtýrýlmamasý lazým. r value reference'den l value reference'a, l value reference'den l value reference ilk deðer verilmez
 
+	- ilk deðer veren nesne 
+
+	class Myclass{
+		Myclass(const Myclass &r); //copy ctor
+		Myclass(Myclass &&r); //move ctor
+		Myclass &operator=(const Myclass &r); //copy assingment;
+		Myclass &operator =(Myclass &&r);//move assignment;
+	};
 	Myclass func();
 		
-	int main(){
+	int main(){ 
 		Myclass m1 = func();//Burada move ctor vardýr.
 		Myclass m2 = m1; //Burada copy constructor kullanýlýr ise
 			
 	}
 
-	- bir fonksiyonun geri dönüþ deðeri sýnýf türünden ise o fonksiyon bize R value gönderir. 
+	- bir fonksiyonun geri dönüþ deðeri sýnýf türünden ise o fonksiyon bize R value expression gönderir. reference  ise l value expression gönderir. 
 
-	- Myclass() = default; //ile default constructor'ý belirtiriz.
-		
+	- taþýma senaryolarýnýn %99'ýnda kaynaðý çalýnan nesne'nin birazdan hayata veda edecektir.
+	
 	int main(){
 		Myclass m1;
 
 		Myclass m2 = m1; //m2'yi m1'in kaynaðýný çalarak hayata getirmek için(move constructor çaðýrýlýr.Yani taþýma yapmaya zorlamak istiyoruz.)
 	}
+	 
+	- öyle yerler var ki bir nesneyi hayata getirmek için l value bir nesne'nin kaynaklarýný çalarak hayata getirmek gerekiyor.
+		Myclass m1;
+		Myclass m2{m1}; // burada copy ctor deðil move ctor'ýn çaðrýlmasýný istiyoruz.
+	- Buradaki asýl amaç dilin kurallarý biz taþýma yapmak istesekte l value bir nesne için her zaman cpoy ctor'ý çaðýracaktýr. 
+	  Bu durumda derleyiciyi taþýma yapmaya zorlayacaðýz.
+	- move fonksiyonu, kendise argüman olarak gönderilen l value bir nesneyi r value'ye döndürür. 
 
-	- öyle bir fonksiyon var ki bu fonksiyona L value expression gönderdiðimiz zaman geri dönüþ deðeri olarak R value expression olan bir ifade verir.
 	- Myclass m2 = move(m1);
 	- copy constructor deðil move constructor çaðrýldý(6792).
 
 	- Normalde dilin sentaksýna göre copy constructor çaðrýlacaðýna yerine kopyalama için kullanýlacak nesnenin kaynak kodlarýna çalarak move constructorý çaðýrabiliriz.
 	- move fonksiyonu run time daçalýþan bir fonksiyon deðildir. Tamamen compile time a baðlý bir fonksiyondur.
-
-	- C++'da eþ isimler using ile kullanýlýr.(C'deki typedef gibi)
-	- using Fcmp = int(*)(const char *, const char *);//strcmp
+	- move fonksiyonu l value expression'dan r value expression'ýna cast yapar.
+	- move fonksiyonuna l value expression gönderdiðimiz zaman fonksiyon ayný nesneyi r value reference  olara	k geri döndürür.
+	
+	- move fonksiyonu runtime da çaðýrýlan deðil compile time da çaðrýlan bir fonksiyondur.
+	- C++'da eþ isimler(alias) using ile kullanýlýr.(C'deki typedef gibi) using Word = int; // C++'ta böyle typedef yapmalýyýz.
+	- using Fcmp = int(*)(const char *, const char *);//strcmp'nin adresinin türünü fcmp'ye veriyoruz.
 	- Ýleri de öyle eþ isim yapýlarý  gelecek ki using ile yapabiliriz. Fakat typedef ile yapamayýz.
 
 Not : C++'ýn öteden beri olan sentaksýndan dolayý enum türünden bir nesneye baþka hiç bir türden otomatik tür dönüþümü yoktur. Yani sadece ve sadece enum türünden bir nesne yada onun enumarator'lerinden birini atayabiliriz.
 	- C++'dan enum'dan diðer türlere dönüþüm vardýr. ancak enum class'lardan da diðer türlere dönüþüm yoktur.
 
+
 Not : incomplete declaration(class Myclass; Yani implimentasyonu yoktur.) kullanýlan yerler de incomplete declaration kullanarak bir baþlýk dosyasýný include etmekten kurtulabiliriz.
-	
+	- Derleyicinin o türün, bir tür olduðunu biliyor ama o tür hakkýnda bütün bilgileri elde etmemiþtir.
+
+	- incomlete type ile pointer tanýmlayabilirsiniz.
 	- C'de de C++'da da enumarator'lerin scope'u enum türünün scope'dýr. Global enumarator isimleri global scope'u kirletmelerinden dolayý sýkýntý olur.
-	
+
 	- bu çakýþmayý önlemek için C++'da ilk yol olarak isimleri özelleþtirebiliriz. ikinci yol olarak bunlarý bir class içine alarak class scope'una dahil edebiliriz.
 
-	- enum class  C'de olmayan C++. için de 11 standartlarý gelen bir enum vardýr.
+	- enum class  C'de olmayan C++ için de 11 standartlarý gelen bir türdür.
 	-1.si eski tip enum(unscope enum) 2. si 'de enum class(scope) isminde iki farklý scope vardýr.
 
 	- enum class ScreenColor {White, Yellow, Gray};
@@ -1827,17 +1912,25 @@ Not : incomplete declaration(class Myclass; Yani implimentasyonu yoktur.) kullan
 	  TrafficColor tcolor = TrafficColor::Yellow; // böylece scope problemi tamamen çözülmüþtür.
 
 	Not : enum Status {Off, On, Hold, Standby};
-		Status s = Status::Hold; //Normalde Status'un herhangi bir scope'u olmamasýna raðmen bu kullanýmý da legal kýlmýþlardýr. 
-
-	- bir yeni gelen özellikte enum türlerinin underlined type'ýný kendimiz belirleyebiliriz.Bu hem enum class olsun yada C'den gelen(covensional enum'lar) olsun underlined type alabilirler.
-	  
-	  enum Color: unsigned int{Black, Blue, Purple};
-	  // Bunun storage'la ilgisi olabilir.
+		Status s = Status::Hold; //Normalde Status'un herhangi bir scope'u olmamasýna raðmen bu kullanýmý da legal kýlmýþlardýr. Ama koddan asla bunun bir enum class olduðunu düþünmemeliyiz.
+		Yani burada Status::Hold ile Hold demek arasýnda hiç bir farklýlýk yoktur.  
 	
+	- enum class ile birlikte diðer aritmetik türlerden enum türüne dönüþümün legal olmadýðý gibi, enum class türünden diðer türlere otomatik tür dönüþümü yoktur.
+	- Burada tür dönüþtürme operatörelini kullanarak ancak tür dönüþümü yoktur.
+
+	- bir yeni gelen özellikte enum türlerinin underlined type'ýný kendimiz belirleyebiliriz.Bu hem enum class olsun yada C'den gelen(convensional enum'lar) olsun underlined type alabilirler.
+
+	 enum Color: unsigned int{Black, Blue, Purple};
+	  // Bunun storage'la ilgisi olabilir. Yani bellek tasarrufu söz konusu olabilir. 
+
+    - Underlined'ýn type'ýn ne olduðunun programcýnýn belirtmesi storage ile ilgili nedenlere dayanabilir. Asýl önemli faydasý forward declaration'ý mümkün kýlmasýdýr.
+	
+	- 
+
 	- C'de R value expression ancak C++'da L value expression olan ifadeler.
 	  1-) ++x;
-	  2-) x, y;
-	  3-) flag ? x : y;
+	  2-) (x, y);
+	  3-) (flag ? x : y)
 
 	  if (x > 10)
 		a = y;
@@ -1846,44 +1939,91 @@ Not : incomplete declaration(class Myclass; Yani implimentasyonu yoktur.) kullan
 		- if deyimi  ile aþaðýdaki iki deyim ayný anlama sahiptir..
 		(x > 10 ? a : b) = y;// C++'da L value expression'dýr.
 		*(x > 10 ? &a : &b) = y; // C'de yukarida ki kodun yazýlma þekli bu olacaktýr.
-	
+
+		//cpp reference'ta value categories'i oku
+		// thomas becker r value reference
+		- cpp'taki expression'lar  
+		- l value
+		- r value
+		- x value(expiring value)//Hayata sona erecek olan nesneler
+		- prvalue (pure r value)//
+		
+		- C'deki sað taraf deðeri dediðimiz fadeler pr value'nin karþýlýðýdýr.
 	--- conversion constructor---
-
-	- Bir class nesnesine int türden bir deðer atamak bir error deðildir.
-	- Sýnýflarýn tek parametreli constructor'larýna conversion constructor denir.
-	- Sýnýfýn tek parametli constructor'larý parametresi türden bir deðeri olan T türünü o sýnýf türüne dönüþtürecektir.
 	
-	-  My class m{36};
+	- Sýnýflarýn tek parametreli constructor'larýna conversion constructor denir.
+	- Sýnýfýn tek parametli constructor'larý parametresinin türünden bir deðeri   bu sýnýf türüne dönüþtürebilir.
+	
+	- m = 12; // derleyici burada  atama yaparken geçici bir nesne oluþturacaktýr.  ifade bittikten sonra geçici nesne hayatýna veda etmektedir.
+	- Derleyici burada atama operatörünün sol operandýný tarafýný sýnýf türünden sað operandýný int türden olduðunu belirleyip ve derleyici bu türden
+	  bir sýnýf oluþturup bununla atama yapar.Yani derleyici m = 12; için ilk baþta Myclass tmep{12}; && m.operator=(temp) þeklinde bir koda dönüþtürür.
 
-	- m = 12; // derleyici burada  atama yaparken geçici bir nesne oluþturacaktýr.  
-	//----->bu noktadan sonra derleyicinin oluþturduðu geçici nesne yoktur.
-	/*
-	 Myclass temp {12};
-	 m.operator = (temp);(6940)
-	 
+	 - Derleyicinin bu duurumlar için oluþturduðu nesnenelere geçici nesne denir.
 	 - Geçici nesnelerin ömrü onlarýn gerektiði yerdeki ifade gerçekleþtikten sonra ömrü sona erecektir.
+	 - Geçici nesneler r value expression'dýr.
+	 - ortada taþýma semantiði varsa taþýma semantiði devreye girecektir. Yoksa kopyalama semantiði devreye girecektir.
+
 	 - Bazý yerlerde conversion constructor'ýn olmasý istenen bir þeydir.(özellikle String sýnýfýnda)
+	 - string sýnýýfýnýn const char * parametreli bir conversion  constructor'ý vardýr.
 
 	 - class Counter {
 		
 	 };
 	- Dilin kurallarý conversion constructor'ýn devreye girmesi gereken yeri programcýya býrakmamaktadýr.
-	- DErleyici bir user defined convertion'ý dilin normal convertion'ý  izlediðinde bunlarý yapmak zorundadýr. Yada  tam tersi olduðunda gene zorunluluðu vardýr.
-	- Yani ard arda iki kez arka arkayae user defined conversion yapamaz.
-	- A-----> B--->C // C = A; ile bu dönüþümü yapmak mümkün deðildir.
+	- DErleyici bir user defined convertion'ý dilin normal conversion'ý  izlediðinde bunlarý yapmak zorundadýr. Yada normal conversion'ý user defined conversion izlediði zaman bunu yapmak
+	  zorundadýr.
+		örneðin:
+			void func(Myclass m);
+			func(char c);// Myclass sýnýfýnýn int parametreli conversition constructor'ý çaðýrýlacaktýr. Öncelikle char türünden int türüne, int türünden de Myclass türüne dönüþüm
+			gerçekleþir. 
+	- Derleyici atama durumunda hiç bir zaman ard arda iki defa user defined conversion yapmaz. Yani iki defa conversion constructor'ý çaðýrmayacaktýr.
+	- Conversion consturctor'ýn kullanýlmasý tipik bir user defined conversion örneðidir.
+	-  
 
+	- Yani ard arda iki kez arka arkayae user defined conversion yapamaz.
+	- A-----> B--->C // C = A; ile bu dönüþümü yapmak mümkün deðildir.Buradaki durum bir atama durumudur bunu asla ilk deðer verme ile karýþtýrma
+	- Standart kütüphanenin kullamýnda örneðin bu konu bilinmez ise hiç beklenmedik senaryolarla karþýlaþýlanabilir.
+
+
+	- Derleyicinin otomatik olarak conversion constructor'a çaðrý yapmasýný istemiyorsak bunu engellemenin bir yolu vardýr. Bunun için explicit keyword'u kullanýlýr.
+	  Bunu yapmamýzýn nedeni tamamen hiç beklenmedik bir þekilde hata ile karþýlaþabiliriz. Bu konuda ki araca explicit constructor denir.
 	- explicit constructor explicit keyword'u ile belirtilen constructor'dýr.
 
 	- C++'da bazý anahtar sözcükler var ki bildirim de de, tanýmda da kullanýlmak zorundadýr. explicit anahtar sözcüðü tanýmda kullanýlamaz.
 	- explicit ile belirtilen constructor'ýn otomatik tür dönüþümlerinin bu constructor'ýn kullanýlamayacaðýný belirtir.
+	- explicit keyword'unun kattýðý anlam fonksiyonun tür dönüþümü yapacaðý ancak tür dönüþtürme operatörü ile tür dönüþtürme yapacaðýný belirtir.
+	  örneðin:
+			Myclass'ýn int parametreli bir conversion constructor'ý explicit key word'u ile belirtilsin.
+			Myclass m = 12; gibi bir legal olmamakla beraber ancak ve ancak Myclass m = static_cast<Myclass>(12) þeklinde yapýlabilir.
+- explicit conversion = açýk dönüþüm anlamýna gelir. derleyici arka planda kendisi otomatik dönüþüm yapmaz.Sadece açýk bir þekilde dönüþüme izin verir.
+	
+- derleyicinin durumdan vazife çýkarýp otomatik olarak yaptýðý tür dönüþümlerine implicit conversion.
+- tamamen programcý tarafýndan açýk bir þekilde yapýlan dönüþümleri explict coversion denir(tpe_cast operatörleri iledir).
 	- bunu otomatik tür dönüþtürme operatörü ile yapabiliriz.()
 	- çok özel bir durum deðilse conversion costructorlarý explicit yapmak iyi bir fikirdir.
 	- conversion constructor bir special member function deðildir. Bunu yazacak isek convertion constructor'ýn kodunu kendimiz yazmalýyýz.
 
-	- Counter z = 45; derleyici 45 ifadesini geçici bir Counter nesnesini dönüþtürür. Sonra da oluþturulan bu nesneyi copy constructor ile z ' ye ata;(Counter temp(45); Counter z(temp); ifadesine dönüþtürür.)
-	- Counter z = 45; ile derleyici aslýnda Counter z(45); ifadesi olur. Eðer convertion constructor explicit ise bu durum sentaks hatasýdýr.()
+	- Counter z = 45; derleyici 45 ifadesini geçici bir Counter nesnesini dönüþtürür. Sonra da oluþturulan bu nesneyi move constructor ile z ' ye ata;(Counter temp(45); Counter z(temp); ifadesine dönüþtürür.)
+	- Counter z = 45; ile derleyici aslýnda Counter z(45); ifadesi olur. Eðer convertion constructor explicit ise bu durum sentaks hatasýdýr.Bu durum üsttekine ek olarak
+	  derleyicinin optimazyonu ile ilgilidir. Neredeyse bütün derleyiciler bu optimizasyonu yapar ve hiçbiri de burada copy ctor'ý çaðýrmayacaktýr.
+	
+	- Counter z = 45; sentaksýn geçerli olmasý için sýnýfýn ilgili constructor'ýnýn explicit olmamasý gerekiyor. Burada atama yok. Bir nesneyi initialize ederken. daha ileri araçlar kullanýlmalýdýr.
+
 	- tek parametreli olmayan bir constructor'ýn explicit keyword'u ile bildirilmesini sentaks hatasý olarak görmez.
-Not : Smart pointer'lar kopyalamaya tamamen kapatýlmýþ pointer'lardýr. Hiç bir zaman dinamik nesne'nin iki sahibi açýktýr. Ama taþýma semantiðine açýktýr.
+
+	- Tek parametreli olmayan constructor'larýn explicit olmasý çok marjinal durumlar için geçerlidir.
+
+Not : Smart pointer'lar kopyalamaya tamamen kapatýlmýþ pointer'lardýr. Hiç bir zaman dinamik nesne'nin iki sahibi yoktur. Ama taþýma semantiðine açýktýr.
+	- unique_ptr<T> C++'da en çok kullanýlan smart pointer sýnýfýdýr. Varlýk nedeni exlusive owner ship(tek sahiplik) ilkesini implemente etmek için kullanýlýr.
+	- Bir kaynaðýn tek bir sahibi olur. Ayný zaman da iki sahibi olamaz. Kaynaðýn sahibi olan nesne öldüðünde, kaynak ta geri verilir.
+	- unique_ptr sýnýfýnýn kullanýlma nedeni dinamik nesnelerin kontrolü içindir. Dinamik nesneyi yönetmek te kullanacak unique_ptr nesnesinin hayatý bittiðinde
+	  dinamik nesneninde hayatý bitecektir. uniqu
+	
+	- Derleyicinin primitive türler için oluþturduðu geçici nesneler her zaman cosnt kabul edilir.
+	
+	- Derleyicinin oluþturduðu geçici nesnelere iliþkin kullaným alaný, geçici nesnenin oluþumunu saðlayan ifadenin yürütümü bitene kadar
+	  nesne hayata devam eder.
+	  Bir fonskiyon çaðrýsýna gönderilen geçici nesne için fonksiyon iþlevini bitirtikten sonra geçici nesnenin hayatý biter.e
 	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	------------------ 02.12.2017 CUMARTESÝ---------------------
 	Myclass m2(10);

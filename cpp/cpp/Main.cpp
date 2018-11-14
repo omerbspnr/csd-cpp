@@ -1,59 +1,33 @@
-#include <iostream>
+#include<iostream>
 #include <string>
-#include "name.h"
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <iterator>
-#include <list>
+#include <memory>
 
-#include "nutility.h"
-
-using namespace std;
-
-class Address {
-	size_t mlen;
-	char *mp;
+class Myclass {
 public:
-	Address(const char *pa) : mlen{ strlen(pa) }, mp{ new char[mlen + 1] }
-	{
-		strcpy(mp, pa);
+	Myclass() {
+		std::cout << "Myclass ctor" << std::endl;
 	}
-
-	~Address()
-	{
-		delete[]mp;
+	Myclass(int m) {
+		std::cout << "Myclass" << std::endl;
 	}
-
-	void print()const
-	{
-		std::cout << "Adres = " << mp << endl;
+	Myclass(const Myclass &r) {
+		std::cout << "const Myclass" << std::endl;
 	}
-	size_t getlen()const
-	{
-		return mlen;
+	Myclass( Myclass &&r) {
+		std::cout << "Myclass &&" << std::endl;
 	}
-	///
+	~Myclass() {
+		std::cout << "Myclass::~Myclass()" << std::endl;
+	}
 };
 
-void func(Address a)
-{
-	std::cout << "func cagrildi\n";
-	a.print();
-	std::cout << "func sona erdi\n";
-	getchar();
-}
+void foo(Myclass &m) {
 
-int main()
-{
-	Address a1{ "Necati Ergin Astoria Plaza Kat 27 Esentepe" };
-	cout << a1.getlen() << endl;
-	a1.print();
-	func(a1);
-
-	a1.print();
 }
 
 
 
-
+int main() {
+	const Myclass m;
+	foo(const_cast<Myclass *>(&m));
+} 
